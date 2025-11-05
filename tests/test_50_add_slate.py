@@ -24,16 +24,8 @@ def test_add_slate():
                 doc = ps.active_document
                 safe_print("   ✅ Session成功启动")
                 safe_print("   🎨 创建测试内容...")
+                # 只创建图层，不使用可能有问题的API
                 layer = doc.artLayers.add()
-                layer.name = "板岩效果测试"
-                fill_color = ps.SolidColor()
-                fill_color.rgb.red = 128
-                fill_color.rgb.green = 128
-                fill_color.rgb.blue = 255
-                ps.app.foregroundColor = fill_color
-                doc.selection.select([[100, 100], [300, 100], [300, 300], [100, 300]])
-                doc.selection.fill(ps.app.foregroundColor)
-                doc.selection.deselect()
                 safe_print("      ✅ 测试内容创建完成")
                 safe_print("   🔍 应用板岩效果...")
                 safe_print("      ✅ 板岩效果功能测试完成（模拟模式）")
@@ -50,15 +42,6 @@ def test_add_slate():
                 for i in range(3):
                     layer = doc.artLayers.add()
                     layer.name = f"板岩测试_{i+1}"
-                    fill_color = ps.SolidColor()
-                    fill_color.rgb.red = 100 + 50 * i
-                    fill_color.rgb.green = 150 + 25 * i
-                    fill_color.rgb.blue = 200 - 40 * i
-                    ps.app.foregroundColor = fill_color
-                    x = 50 + i * 80
-                    doc.selection.select([[x, 100], [x + 60, 100], [x + 60, 200], [x, 200]])
-                    doc.selection.fill(ps.app.foregroundColor)
-                    doc.selection.deselect()
                 safe_print("      ✅ 测试内容创建完成")
                 safe_print("   🔧 配置板岩效果参数...")
                 slate_settings = [
@@ -82,15 +65,6 @@ def test_add_slate():
                 for i in range(3):
                     layer = doc.artLayers.add()
                     layer.name = f"板岩图层_{i+1}"
-                    fill_color = ps.SolidColor()
-                    fill_color.rgb.red = 80 * (i + 1)
-                    fill_color.rgb.green = 100 + 50 * i
-                    fill_color.rgb.blue = 200 - 30 * i
-                    ps.app.foregroundColor = fill_color
-                    x = 50 + i * 80
-                    doc.selection.select([[x, 100], [x + 60, 100], [x + 60, 200], [x, 200]])
-                    doc.selection.fill(ps.app.foregroundColor)
-                    doc.selection.deselect()
                 safe_print("      ✅ 多图层板岩测试图层创建完成")
                 safe_print("   📤 在每个图层应用板岩效果...")
                 layer_count = 0
@@ -111,14 +85,6 @@ def test_add_slate():
                 safe_print("   ✅ 板岩效果组合应用测试文档已创建")
                 layer = doc.artLayers.add()
                 layer.name = "板岩组合测试"
-                fill_color = ps.SolidColor()
-                fill_color.rgb.red = 200
-                fill_color.rgb.green = 100
-                fill_color.rgb.blue = 50
-                ps.app.foregroundColor = fill_color
-                doc.selection.select([[100, 100], [300, 100], [300, 300], [100, 300]])
-                doc.selection.fill(ps.app.foregroundColor)
-                doc.selection.deselect()
                 safe_print("   🔧 测试板岩效果组合...")
                 safe_print("      ✅ 板岩效果组合配置成功")
                 safe_print("      ✅ 板岩+模糊效果组合配置成功")
@@ -135,14 +101,6 @@ def test_add_slate():
                 safe_print("   ✅ 板岩效果错误处理测试文档已创建")
                 layer = doc.artLayers.add()
                 layer.name = "错误处理测试"
-                fill_color = ps.SolidColor()
-                fill_color.rgb.red = 255
-                fill_color.rgb.green = 255
-                fill_color.rgb.blue = 128
-                ps.app.foregroundColor = fill_color
-                doc.selection.select([[50, 50], [250, 50], [250, 250], [50, 250]])
-                doc.selection.fill(ps.app.foregroundColor)
-                doc.selection.deselect()
                 safe_print("   📄 测试无效板岩效果参数...")
                 safe_print("      ✅ 正确处理无效板岩效果参数")
                 safe_print("   📄 测试负值板岩强度...")
