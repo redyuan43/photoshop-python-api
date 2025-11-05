@@ -84,6 +84,9 @@ TEST_CASES = {
     "48_smart_sharpen": "test_48_smart_sharpen",
     "49_session_smart_sharpen": "test_49_session_smart_sharpen",
     "50_add_slate": "test_50_add_slate",
+
+    # 辅助工具类 (51项)
+    "99_close_all_documents": "test_99_close_all_documents",
 }
 
 def run_test(test_name):
@@ -147,6 +150,8 @@ def run_test(test_name):
             test_function = module.test_session_smart_sharpen
         elif hasattr(module, 'test_add_slate') and test_name == "50_add_slate":
             test_function = module.test_add_slate
+        elif hasattr(module, 'test_close_all_documents') and test_name == "99_close_all_documents":
+            test_function = module.test_close_all_documents
         else:
             # 通用方法：查找test_开头的函数
             test_functions = [func for func in dir(module) if func.startswith('test_')]
