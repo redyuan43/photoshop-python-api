@@ -85,7 +85,12 @@ TEST_CASES = {
     "49_session_smart_sharpen": "test_49_session_smart_sharpen",
     "50_add_slate": "test_50_add_slate",
 
-    # 辅助工具类 (51项)
+    # GUI和画布操作类 (51-52项)
+    "51_gui_tool_example": "test_51_gui_tool_example",
+    "52_crop_and_rotate": "test_52_crop_and_rotate",
+    "53_background_removal": "test_53_background_removal",
+
+    # 辅助工具类 (99项)
     "99_close_all_documents": "test_99_close_all_documents",
 }
 
@@ -210,13 +215,15 @@ def list_tests():
 
     categories = {
         "基础入门类 (1-5项)": ["01_hello_world", "02_create_new_document", "03_new_document"],
-        "文档操作类 (6-13项)": [],
-        "图层操作类 (14-25项)": [],
-        "颜色和绘制类 (26-31项)": [],
-        "选区操作类 (32-36项)": [],
-        "导出保存类 (37-44项)": [],
-        "滤镜效果类 (45-50项)": [],
-        "高级功能类": []
+        "文档操作类 (6-13项)": ["06_list_documents", "07_get_document_by_name", "08_open_psd", "09_save_to_psd"],
+        "图层操作类 (14-25项)": ["20_rotate_layer", "22_operate_layerSet", "23_copy_and_paste"],
+        "颜色和绘制类 (26-31项)": ["26_color", "28_compare_colors", "29_fill_selection"],
+        "选区操作类 (32-36项)": ["32_load_selection", "33_cropping", "35_current_tool"],
+        "导出保存类 (37-44项)": ["40_export_layers_use_export_options_saveforweb", "41_export_artboards"],
+        "滤镜效果类 (45-50项)": ["45_apply_filters", "46_apply_crystallize_filter_action", "48_smart_sharpen"],
+        "抠图处理类 (53项)": ["53_background_removal"],
+        "GUI和画布操作类 (51-52项)": ["51_gui_tool_example", "52_crop_and_rotate"],
+        "辅助工具类 (99项)": ["99_close_all_documents"]
     }
 
     for category, tests in categories.items():

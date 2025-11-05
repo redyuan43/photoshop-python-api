@@ -84,19 +84,38 @@ def test_replace_images():
                 original_height = bounds[3] - bounds[1]
                 safe_print(f"      📏 原始尺寸: {original_width} x {original_height}")
 
-                # 尝试执行替换操作 (原始代码逻辑)
+                # 尝试执行替换操作 (改进版本)
                 safe_print("   🔄 执行图像替换操作...")
                 try:
-                    # 使用stringIDToTypeID (原始代码逻辑)
+                    # 使用ActionDescriptor实现图像替换
                     replace_contents = ps.app.stringIDToTypeID("placedLayerReplaceContents")
-                    desc = ps.ActionDescriptor
+                    desc = ps.ActionDescriptor()
                     idnull = ps.app.charIDToTypeID("null")
                     desc.putPath(idnull, png_path)
                     ps.app.executeAction(replace_contents, desc)
                     safe_print("      ✅ 替换操作执行成功")
+
+                    # 验证替换结果
+                    new_bounds = active_layer.bounds
+                    safe_print(f"      📐 替换后边界: {new_bounds}")
+
                 except Exception as replace_e:
                     safe_print(f"      ❌ 替换操作失败: {str(replace_e)}")
                     safe_print("      💡 这可能是因为缺少智能对象图层")
+                    safe_print("      🔄 使用备选方法：直接导入替换...")
+
+                    # 备选方法：直接导入图像
+                    try:
+                        # 删除旧内容
+                        doc2.activeLayer.delete()
+
+                        # 导入新图像
+                        new_layer = doc2.artLayers.add()
+                        import_opts = ps.PlaceEmbedding()
+                        doc2.place(png_path, import_opts, False)
+                        safe_print("      ✅ 备选替换方法执行成功")
+                    except Exception as alt_e:
+                        safe_print(f"      ❌ 备选方法也失败: {str(alt_e)[:100]}")
 
         except Exception as e:
             safe_print(f"❌ 基本替换图像测试失败: {str(e)}")
