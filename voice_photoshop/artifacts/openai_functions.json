@@ -1,0 +1,257 @@
+[
+  {
+    "name": "new_document",
+    "description": "创建新Photoshop文档",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "width": {
+          "type": "integer",
+          "description": "文档宽度 (像素)"
+        },
+        "height": {
+          "type": "integer",
+          "description": "文档高度 (像素)"
+        },
+        "resolution": {
+          "type": "integer",
+          "description": "分辨率 (ppi)"
+        },
+        "name": {
+          "type": "string",
+          "description": "文档名称"
+        }
+      },
+      "required": []
+    }
+  },
+  {
+    "name": "open_document",
+    "description": "打开Photoshop文档",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string",
+          "description": "文件路径"
+        }
+      },
+      "required": [
+        "path"
+      ]
+    }
+  },
+  {
+    "name": "save_document",
+    "description": "保存当前文档",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string",
+          "description": "保存路径（可选，默认覆盖原文件）"
+        }
+      },
+      "required": [
+        "path"
+      ]
+    }
+  },
+  {
+    "name": "smart_sharpen",
+    "description": "智能锐化图像，增强边缘细节",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "type": "number",
+          "description": "锐化强度 (0-500)"
+        },
+        "radius": {
+          "type": "number",
+          "description": "锐化半径 (像素)"
+        },
+        "noiseReduction": {
+          "type": "integer",
+          "description": "降噪百分比 (0-100)"
+        }
+      },
+      "required": []
+    }
+  },
+  {
+    "name": "gaussian_blur",
+    "description": "高斯模糊滤镜",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "radius": {
+          "type": "number",
+          "description": "模糊半径 (像素)"
+        }
+      },
+      "required": []
+    }
+  },
+  {
+    "name": "edge_detect",
+    "description": "边缘检测滤镜",
+    "parameters": {
+      "type": "object",
+      "properties": {},
+      "required": []
+    }
+  },
+  {
+    "name": "rotate_layer",
+    "description": "旋转当前图层",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "angle": {
+          "type": "number",
+          "description": "旋转角度 (度)"
+        }
+      },
+      "required": []
+    }
+  },
+  {
+    "name": "duplicate_layer",
+    "description": "复制当前图层",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "新图层名称"
+        }
+      },
+      "required": []
+    }
+  },
+  {
+    "name": "delete_layer",
+    "description": "删除当前图层",
+    "parameters": {
+      "type": "object",
+      "properties": {},
+      "required": []
+    }
+  },
+  {
+    "name": "merge_layers",
+    "description": "合并所有可见图层",
+    "parameters": {
+      "type": "object",
+      "properties": {},
+      "required": []
+    }
+  },
+  {
+    "name": "create_rectangle",
+    "description": "创建矩形选择区域并填充颜色",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "x": {
+          "type": "integer",
+          "description": "左上角X坐标"
+        },
+        "y": {
+          "type": "integer",
+          "description": "左上角Y坐标"
+        },
+        "width": {
+          "type": "integer",
+          "description": "矩形宽度"
+        },
+        "height": {
+          "type": "integer",
+          "description": "矩形高度"
+        },
+        "color": {
+          "type": "object",
+          "description": "填充颜色 RGB",
+          "properties": {
+            "r": {
+              "type": "integer",
+              "description": ""
+            },
+            "g": {
+              "type": "integer",
+              "description": ""
+            },
+            "b": {
+              "type": "integer",
+              "description": ""
+            }
+          }
+        }
+      },
+      "required": [
+        "color"
+      ]
+    }
+  },
+  {
+    "name": "create_circle",
+    "description": "创建圆形选择区域",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "x": {
+          "type": "integer",
+          "description": "圆心X坐标"
+        },
+        "y": {
+          "type": "integer",
+          "description": "圆心Y坐标"
+        },
+        "radius": {
+          "type": "integer",
+          "description": "圆半径"
+        },
+        "color": {
+          "type": "object",
+          "description": "填充颜色 RGB",
+          "properties": {
+            "r": {
+              "type": "integer",
+              "description": ""
+            },
+            "g": {
+              "type": "integer",
+              "description": ""
+            },
+            "b": {
+              "type": "integer",
+              "description": ""
+            }
+          }
+        }
+      },
+      "required": [
+        "color"
+      ]
+    }
+  },
+  {
+    "name": "select_all",
+    "description": "全选当前文档",
+    "parameters": {
+      "type": "object",
+      "properties": {},
+      "required": []
+    }
+  },
+  {
+    "name": "deselect",
+    "description": "取消选择",
+    "parameters": {
+      "type": "object",
+      "properties": {},
+      "required": []
+    }
+  }
+]

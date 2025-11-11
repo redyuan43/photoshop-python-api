@@ -1,0 +1,290 @@
+{
+  "new_document": {
+    "category": "document",
+    "description": "创建新Photoshop文档",
+    "aliases": [
+      "新建文档",
+      "创建文档",
+      "新建画布"
+    ],
+    "params": [
+      {
+        "name": "width",
+        "type": "int",
+        "description": "文档宽度 (像素)",
+        "required": false,
+        "default": 800
+      },
+      {
+        "name": "height",
+        "type": "int",
+        "description": "文档高度 (像素)",
+        "required": false,
+        "default": 600
+      },
+      {
+        "name": "resolution",
+        "type": "int",
+        "description": "分辨率 (ppi)",
+        "required": false,
+        "default": 72
+      },
+      {
+        "name": "name",
+        "type": "string",
+        "description": "文档名称",
+        "required": false,
+        "default": "Untitled"
+      }
+    ]
+  },
+  "open_document": {
+    "category": "document",
+    "description": "打开Photoshop文档",
+    "aliases": [
+      "打开文档",
+      "打开文件"
+    ],
+    "params": [
+      {
+        "name": "path",
+        "type": "string",
+        "description": "文件路径",
+        "required": true,
+        "default": null
+      }
+    ]
+  },
+  "save_document": {
+    "category": "document",
+    "description": "保存当前文档",
+    "aliases": [
+      "保存文档",
+      "保存文件"
+    ],
+    "params": [
+      {
+        "name": "path",
+        "type": "string",
+        "description": "保存路径（可选，默认覆盖原文件）",
+        "required": false,
+        "default": null
+      }
+    ]
+  },
+  "smart_sharpen": {
+    "category": "filter",
+    "description": "智能锐化图像，增强边缘细节",
+    "aliases": [
+      "锐化",
+      "清晰",
+      "锐化图像",
+      "清晰化"
+    ],
+    "params": [
+      {
+        "name": "amount",
+        "type": "float",
+        "description": "锐化强度 (0-500)",
+        "required": false,
+        "default": 100.0
+      },
+      {
+        "name": "radius",
+        "type": "float",
+        "description": "锐化半径 (像素)",
+        "required": false,
+        "default": 3.0
+      },
+      {
+        "name": "noiseReduction",
+        "type": "int",
+        "description": "降噪百分比 (0-100)",
+        "required": false,
+        "default": 20
+      }
+    ]
+  },
+  "gaussian_blur": {
+    "category": "filter",
+    "description": "高斯模糊滤镜",
+    "aliases": [
+      "模糊",
+      "高斯模糊"
+    ],
+    "params": [
+      {
+        "name": "radius",
+        "type": "float",
+        "description": "模糊半径 (像素)",
+        "required": false,
+        "default": 10.0
+      }
+    ]
+  },
+  "edge_detect": {
+    "category": "filter",
+    "description": "边缘检测滤镜",
+    "aliases": [
+      "边缘",
+      "边缘检测"
+    ],
+    "params": []
+  },
+  "rotate_layer": {
+    "category": "layer",
+    "description": "旋转当前图层",
+    "aliases": [
+      "旋转图层",
+      "旋转",
+      "图层旋转"
+    ],
+    "params": [
+      {
+        "name": "angle",
+        "type": "float",
+        "description": "旋转角度 (度)",
+        "required": false,
+        "default": 45.0
+      }
+    ]
+  },
+  "duplicate_layer": {
+    "category": "layer",
+    "description": "复制当前图层",
+    "aliases": [
+      "复制图层",
+      "图层复制"
+    ],
+    "params": [
+      {
+        "name": "name",
+        "type": "string",
+        "description": "新图层名称",
+        "required": false,
+        "default": "Copy"
+      }
+    ]
+  },
+  "delete_layer": {
+    "category": "layer",
+    "description": "删除当前图层",
+    "aliases": [
+      "删除图层",
+      "图层删除"
+    ],
+    "params": []
+  },
+  "merge_layers": {
+    "category": "layer",
+    "description": "合并所有可见图层",
+    "aliases": [
+      "合并图层",
+      "图层合并"
+    ],
+    "params": []
+  },
+  "create_rectangle": {
+    "category": "selection",
+    "description": "创建矩形选择区域并填充颜色",
+    "aliases": [
+      "矩形",
+      "矩形框",
+      "创建矩形",
+      "画矩形"
+    ],
+    "params": [
+      {
+        "name": "x",
+        "type": "int",
+        "description": "左上角X坐标",
+        "required": false,
+        "default": 100
+      },
+      {
+        "name": "y",
+        "type": "int",
+        "description": "左上角Y坐标",
+        "required": false,
+        "default": 100
+      },
+      {
+        "name": "width",
+        "type": "int",
+        "description": "矩形宽度",
+        "required": false,
+        "default": 100
+      },
+      {
+        "name": "height",
+        "type": "int",
+        "description": "矩形高度",
+        "required": false,
+        "default": 100
+      },
+      {
+        "name": "color",
+        "type": "object",
+        "description": "填充颜色 RGB",
+        "required": false,
+        "default": null
+      }
+    ]
+  },
+  "create_circle": {
+    "category": "selection",
+    "description": "创建圆形选择区域",
+    "aliases": [
+      "圆形",
+      "画圆"
+    ],
+    "params": [
+      {
+        "name": "x",
+        "type": "int",
+        "description": "圆心X坐标",
+        "required": false,
+        "default": 200
+      },
+      {
+        "name": "y",
+        "type": "int",
+        "description": "圆心Y坐标",
+        "required": false,
+        "default": 200
+      },
+      {
+        "name": "radius",
+        "type": "int",
+        "description": "圆半径",
+        "required": false,
+        "default": 50
+      },
+      {
+        "name": "color",
+        "type": "object",
+        "description": "填充颜色 RGB",
+        "required": false,
+        "default": null
+      }
+    ]
+  },
+  "select_all": {
+    "category": "selection",
+    "description": "全选当前文档",
+    "aliases": [
+      "全选",
+      "选择全部"
+    ],
+    "params": []
+  },
+  "deselect": {
+    "category": "selection",
+    "description": "取消选择",
+    "aliases": [
+      "取消选择",
+      "取消"
+    ],
+    "params": []
+  }
+}

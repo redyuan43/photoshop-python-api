@@ -1,0 +1,98 @@
+# 选择操作类
+# Create Rectangle - 创建矩形框
+- name: create_rectangle
+  category: selection
+  description: "创建矩形选择区域并填充颜色"
+  aliases: ["矩形", "矩形框", "创建矩形", "画矩形"]
+  params:
+    x:
+      type: int
+      description: "左上角X坐标"
+      min: 0
+      default: 100
+    y:
+      type: int
+      description: "左上角Y坐标"
+      min: 0
+      default: 100
+    width:
+      type: int
+      description: "矩形宽度"
+      min: 1
+      default: 100
+    height:
+      type: int
+      description: "矩形高度"
+      min: 1
+      default: 100
+    color:
+      type: object
+      description: "填充颜色 RGB"
+      properties:
+        r:
+          type: int
+          min: 0
+          max: 255
+          default: 255
+        g:
+          type: int
+          min: 0
+          max: 255
+          default: 100
+        b:
+          type: int
+          min: 0
+          max: 255
+          default: 100
+
+- name: create_circle
+  category: selection
+  description: "创建圆形选择区域"
+  aliases: ["圆形", "画圆"]
+  params:
+    x:
+      type: int
+      description: "圆心X坐标"
+      min: 0
+      default: 200
+    y:
+      type: int
+      description: "圆心Y坐标"
+      min: 0
+      default: 200
+    radius:
+      type: int
+      description: "圆半径"
+      min: 1
+      default: 50
+    color:
+      type: object
+      description: "填充颜色 RGB"
+      properties:
+        r:
+          type: int
+          min: 0
+          max: 255
+          default: 255
+        g:
+          type: int
+          min: 0
+          max: 255
+          default: 100
+        b:
+          type: int
+          min: 0
+          max: 255
+          default: 100
+
+- name: select_all
+  category: selection
+  description: "全选当前文档"
+  aliases: ["全选", "选择全部"]
+  params: {}
+
+- name: deselect
+  category: selection
+  description: "取消选择"
+  aliases: ["取消选择", "取消"]
+  params: {}

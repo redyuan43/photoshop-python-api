@@ -1,0 +1,321 @@
+# 核心功能 - 滤镜效果
+- name: smart_sharpen
+  category: filter
+  priority: P0
+  description: "智能锐化"
+  aliases:
+    - "智能锐化"
+    - "智能清晰"
+  params:
+    amount:
+      type: float
+      description: "锐化强度 (0-500)"
+      min: 0
+      max: 500
+      default: 100.0
+    radius:
+      type: float
+      description: "锐化半径 (0.1-50)"
+      min: 0.1
+      max: 50
+      default: 3.0
+    noiseReduction:
+      type: int
+      description: "降噪百分比 (0-100)"
+      min: 0
+      max: 100
+      default: 20
+    removeMotionBlur:
+      type: bool
+      description: "移除动感模糊"
+      default: false
+    angle:
+      type: float
+      description: "模糊角度"
+      default: 0
+    moreAccurate:
+      type: bool
+      description: "更精确"
+      default: true
+
+- name: gaussian_blur
+  category: filter
+  priority: P0
+  description: "高斯模糊"
+  aliases:
+    - "高斯模糊"
+    - "模糊"
+  params:
+    radius:
+      type: float
+      description: "模糊半径 (0.1-250)"
+      min: 0.1
+      max: 250
+      default: 10.0
+
+- name: blur
+  category: filter
+  priority: P0
+  description: "模糊"
+  aliases:
+    - "模糊"
+    - "简单模糊"
+
+- name: sharpen
+  category: filter
+  priority: P0
+  description: "锐化"
+  aliases:
+    - "锐化"
+    - "清晰"
+
+- name: blur_more
+  category: filter
+  priority: P0
+  description: "进一步模糊"
+  aliases:
+    - "进一步模糊"
+    - "强模糊"
+
+- name: motion_blur
+  category: filter
+  priority: P1
+  description: "动感模糊"
+  aliases:
+    - "动感模糊"
+    - "运动模糊"
+  params:
+    angle:
+      type: float
+      description: "模糊角度 (-360到360)"
+      min: -360
+      max: 360
+      default: 0
+    distance:
+      type: int
+      description: "模糊距离 (1-999)"
+      min: 1
+      max: 999
+      default: 10
+
+- name: radial_blur
+  category: filter
+  priority: P1
+  description: "径向模糊"
+  aliases:
+    - "径向模糊"
+    - "旋转模糊"
+  params:
+    amount:
+      type: int
+      description: "数量 (1-100)"
+      min: 1
+      max: 100
+      default: 10
+    blur_method:
+      type: string
+      description: "模糊方法 (spin/zoom)"
+      default: "spin"
+    quality:
+      type: string
+      description: "品质 (draft/good/best)"
+      default: "good"
+
+- name: surface_blur
+  category: filter
+  priority: P1
+  description: "表面模糊"
+  aliases:
+    - "表面模糊"
+  params:
+    radius:
+      type: int
+      description: "半径 (1-100)"
+      min: 1
+      max: 100
+      default: 15
+    threshold:
+      type: int
+      description: "阈值 (0-255)"
+      min: 0
+      max: 255
+      default: 15
+
+- name: lens_blur
+  category: filter
+  priority: P1
+  description: "镜头模糊"
+  aliases:
+    - "镜头模糊"
+
+- name: median_blur
+  category: filter
+  priority: P1
+  description: "中值模糊"
+  aliases:
+    - "中值模糊"
+
+- name: emboss
+  category: filter
+  priority: P1
+  description: "浮雕"
+  aliases:
+    - "浮雕"
+    - "凹凸效果"
+  params:
+    angle:
+      type: float
+      description: "浮雕角度 (0-360)"
+      min: 0
+      max: 360
+      default: 45
+    height:
+      type: int
+      description: "浮雕高度 (1-100)"
+      min: 1
+      max: 100
+      default: 10
+    amount:
+      type: int
+      description: "数量 (0-500)"
+      min: 0
+      max: 500
+      default: 100
+
+- name: find_edges
+  category: filter
+  priority: P1
+  description: "查找边缘"
+  aliases:
+    - "查找边缘"
+    - "边缘检测"
+
+- name: trace_contour
+  category: filter
+  priority: P1
+  description: "描边"
+  aliases:
+    - "描边"
+    - "轮廊"
+
+- name: stylize_diffuse
+  category: filter
+  priority: P1
+  description: "扩散"
+  aliases:
+    - "扩散"
+    - "漫射"
+
+- name: pixelate_mosaic
+  category: filter
+  priority: P1
+  description: "马赛克"
+  aliases:
+    - "马赛克"
+    - "像素化"
+  params:
+    cell_size:
+      type: int
+      description: "单元格大小 (2-300)"
+      min: 2
+      max: 300
+      default: 10
+
+- name: pixelate_crystallize
+  category: filter
+  priority: P1
+  description: "晶格化"
+  aliases:
+    - "晶格化"
+    - "像素化"
+
+- name: pixelate_coloring
+  category: filter
+  priority: P1
+  description: "彩色半调"
+  aliases:
+    - "彩色半调"
+    - "半调"
+
+- name: noise_add
+  category: filter
+  priority: P1
+  description: "添加杂色"
+  aliases:
+    - "添加杂色"
+    - "噪点"
+  params:
+    amount:
+      type: int
+      description: "数量 (0-400)"
+      min: 0
+      max: 400
+      default: 25
+    distribution:
+      type: string
+      description: "分布方式 (uniform/gaussian)"
+      default: "uniform"
+    mono:
+      type: bool
+      description: "单色"
+      default: false
+
+- name: noise_dust_scratches
+  category: filter
+  priority: P1
+  description: "减少杂色"
+  aliases:
+    - "减少杂色"
+    - "去噪"
+
+- name: noise_despeckle
+  category: filter
+  priority: P1
+  description: "去斑"
+  aliases:
+    - "去斑"
+
+- name: noise_median
+  category: filter
+  priority: P1
+  description: "中间值"
+  aliases:
+    - "中间值"
+
+- name: render_clouds
+  category: filter
+  priority: P1
+  description: "云彩"
+  aliases:
+    - "云彩"
+    - "云"
+
+- name: render_difference_clouds
+  category: filter
+  priority: P1
+  description: "分层云彩"
+  aliases:
+    - "分层云彩"
+
+- name: render_fibers
+  category: filter
+  priority: P1
+  description: "纤维"
+  aliases:
+    - "纤维"
+
+- name: render_lens_flare
+  category: filter
+  priority: P1
+  description: "镜头光晕"
+  aliases:
+    - "镜头光晕"
+    - "光晕"
+
+- name: distort_liquify
+  category: filter
+  priority: P2
+  description: "液化（需要手动操作）"
+  aliases:
+    - "液化"
+    - "变形"

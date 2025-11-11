@@ -1,0 +1,705 @@
+description: 控制Photoshop功能的接口
+name: photoshop
+tools:
+- description: 调整亮度对比度
+  input_schema:
+    properties:
+      brightness:
+        description: 亮度 (-100到100)
+        type: integer
+      contrast:
+        description: 对比度 (-100到100)
+        type: integer
+    type: object
+  name: brightness_contrast
+- description: 调整色相饱和度
+  input_schema:
+    properties:
+      hue:
+        description: 色相 (-180到180)
+        type: integer
+      lightness:
+        description: 明度 (-100到100)
+        type: integer
+      saturation:
+        description: 饱和度 (-100到100)
+        type: integer
+    type: object
+  name: hue_saturation
+- description: 调整色阶
+  input_schema:
+    properties:
+      highlight:
+        description: 高光值 (0-255)
+        type: integer
+      midtone:
+        description: 中间调 (0-255)
+        type: integer
+      shadow:
+        description: 阴影值 (0-255)
+        type: integer
+    type: object
+  name: levels
+- description: 调整曲线
+  input_schema:
+    properties:
+      curve_type:
+        description: 曲线类型 (linear/contrast/shadow_highlight)
+        type: string
+    type: object
+  name: curves
+- description: 反相图像
+  input_schema:
+    properties: {}
+    type: object
+  name: invert
+- description: 去色
+  input_schema:
+    properties: {}
+    type: object
+  name: desaturate
+- description: 色调分离
+  input_schema:
+    properties:
+      levels:
+        description: 色阶数 (2-255)
+        type: integer
+    type: object
+  name: posterize
+- description: 创建新文档
+  input_schema:
+    properties:
+      height:
+        description: 文档高度 (像素)
+        type: integer
+      name:
+        description: 文档名称
+        type: string
+      resolution:
+        description: 分辨率 (DPI)
+        type: number
+      width:
+        description: 文档宽度 (像素)
+        type: integer
+    type: object
+  name: new_document
+- description: 打开文档
+  input_schema:
+    properties:
+      path:
+        description: 文件路径
+        type: string
+    required:
+    - path
+    type: object
+  name: open_document
+- description: 保存文档
+  input_schema:
+    properties:
+      format:
+        description: 文件格式 (psd/jpg/png)
+        type: string
+      path:
+        description: 保存路径
+        type: string
+    required:
+    - path
+    type: object
+  name: save_document
+- description: 填充前景色
+  input_schema:
+    properties:
+      color:
+        description: 颜色 (foreground/background/black/white/gray)
+        type: string
+    type: object
+  name: fill_color
+- description: 描边选区
+  input_schema:
+    properties:
+      color:
+        description: 颜色 (black/white/foreground/background)
+        type: string
+      width:
+        description: 描边宽度 (像素)
+        type: integer
+    type: object
+  name: stroke_color
+- description: 油漆桶填充
+  input_schema:
+    properties:
+      tolerance:
+        description: 容差 (0-255)
+        type: integer
+    type: object
+  name: paint_bucket
+- description: 渐变填充
+  input_schema:
+    properties:
+      style:
+        description: 渐变类型 (linear/radial/angle/diamond)
+        type: string
+    type: object
+  name: gradient
+- description: 创建Hello World文本
+  input_schema:
+    properties:
+      color:
+        description: 文本颜色 (red/green/blue/black/white)
+        type: string
+      size:
+        description: 字体大小
+        type: integer
+      text:
+        description: 文本内容
+        type: string
+    type: object
+  name: hello_world
+- description: 获取当前活动图层
+  input_schema:
+    properties: {}
+    type: object
+  name: get_active_layer
+- description: 设置活动图层
+  input_schema:
+    properties:
+      name:
+        description: 图层名称
+        type: string
+    required:
+    - name
+    type: object
+  name: set_active_layer
+- description: 通过名称获取图层
+  input_schema:
+    properties:
+      name:
+        description: 图层名称
+        type: string
+    required:
+    - name
+    type: object
+  name: get_layer_by_name
+- description: 链接图层
+  input_schema:
+    properties: {}
+    type: object
+  name: link_layer
+- description: 移动图层到底部
+  input_schema:
+    properties: {}
+    type: object
+  name: move_to_end
+- description: 列出所有打开的文档
+  input_schema:
+    properties: {}
+    type: object
+  name: list_documents
+- description: 通过名称获取文档
+  input_schema:
+    properties:
+      name:
+        description: 文档名称
+        type: string
+    required:
+    - name
+    type: object
+  name: get_document_by_name
+- description: 打开PSD文件
+  input_schema:
+    properties:
+      path:
+        description: 文件路径
+        type: string
+    required:
+    - path
+    type: object
+  name: open_psd
+- description: 保存为PSD文件
+  input_schema:
+    properties:
+      path:
+        description: 保存路径
+        type: string
+    required:
+    - path
+    type: object
+  name: save_to_psd
+- description: 恢复更改
+  input_schema:
+    properties: {}
+    type: object
+  name: revert_changes
+- description: 适合屏幕显示
+  input_schema:
+    properties: {}
+    type: object
+  name: fit_on_screen
+- description: 添加文档元数据
+  input_schema:
+    properties:
+      author:
+        description: 作者信息
+        type: string
+      title:
+        description: 文档标题
+        type: string
+    type: object
+  name: add_metadata
+- description: 启用资源生成器
+  input_schema:
+    properties: {}
+    type: object
+  name: enable_generator
+- description: 创建新图层
+  input_schema:
+    properties:
+      name:
+        description: 图层名称
+        type: string
+      visible:
+        description: 是否显示
+        type: string
+    type: object
+  name: creating_a_layer
+- description: 导入图像作为图层
+  input_schema:
+    properties:
+      path:
+        description: 图像文件路径
+        type: string
+    required:
+    - path
+    type: object
+  name: import_image_as_layer
+- description: 复制粘贴图层
+  input_schema:
+    properties: {}
+    type: object
+  name: copy_and_paste
+- description: 操作图层集
+  input_schema:
+    properties:
+      name:
+        description: 图层组名称
+        type: string
+    type: object
+  name: operate_layerSet
+- description: 转换智能对象为普通图层
+  input_schema:
+    properties: {}
+    type: object
+  name: convert_smartobject_to_layer
+- description: 旋转图层
+  input_schema:
+    properties:
+      angle:
+        description: 旋转角度
+        type: number
+    type: object
+  name: rotate_layer
+- description: 替换智能对象图像
+  input_schema:
+    properties:
+      path:
+        description: 新图像文件路径
+        type: string
+    required:
+    - path
+    type: object
+  name: replace_images
+- description: 加载选区
+  input_schema:
+    properties:
+      path:
+        description: 选区文件路径
+        type: string
+    required:
+    - path
+    type: object
+  name: load_selection
+- description: 描边选区
+  input_schema:
+    properties:
+      color:
+        description: 描边颜色
+        type: string
+      width:
+        description: 描边宽度
+        type: integer
+    type: object
+  name: stroke_selection
+- description: 删除并填充选区
+  input_schema:
+    properties:
+      fill_color:
+        description: 填充颜色
+        type: string
+    type: object
+  name: delete_and_fill_selection
+- description: 执行Photoshop动作
+  input_schema:
+    properties:
+      action_name:
+        description: 动作名称
+        type: string
+      set_name:
+        description: 动作组名称
+        type: string
+    required:
+    - action_name
+    - set_name
+    type: object
+  name: do_photoshop_action
+- description: 批量处理
+  input_schema:
+    properties:
+      action_name:
+        description: 要执行的动作
+        type: string
+      dest_folder:
+        description: 目标文件夹路径
+        type: string
+      source_folder:
+        description: 源文件夹路径
+        type: string
+    required:
+    - source_folder
+    - dest_folder
+    type: object
+  name: batch_process
+- description: 执行JavaScript脚本
+  input_schema:
+    properties:
+      script:
+        description: JavaScript代码
+        type: string
+    required:
+    - script
+    type: object
+  name: eval_javascript
+- description: 添加启动应用事件
+  input_schema:
+    properties: {}
+    type: object
+  name: add_start_application_event
+- description: 运行批处理
+  input_schema:
+    properties:
+      script_path:
+        description: 批处理脚本路径
+        type: string
+    required:
+    - script_path
+    type: object
+  name: run_batch
+- description: 智能锐化(扩展版)
+  input_schema:
+    properties:
+      amount:
+        description: 锐化强度
+        type: integer
+      angle:
+        description: 角度
+        type: integer
+      noise_reduction:
+        description: 降噪
+        type: integer
+      radius:
+        description: 锐化半径
+        type: number
+      remove_motion_blur:
+        description: 移除运动模糊
+        type: string
+    type: object
+  name: smart_sharpen_ex
+- description: 简单导出文档
+  input_schema:
+    properties:
+      format:
+        description: 导出格式 (jpg/png/tiff/pdf)
+        type: string
+      path:
+        description: 导出路径
+        type: string
+    required:
+    - path
+    type: object
+  name: export_document_simple
+- description: 带选项导出文档
+  input_schema:
+    properties:
+      format:
+        description: 格式 (jpg/png)
+        type: string
+      path:
+        description: 导出路径
+        type: string
+      quality:
+        description: JPEG质量 (0-12)
+        type: integer
+    required:
+    - path
+    type: object
+  name: export_document_with_options
+- description: 导出所有图层为PNG
+  input_schema:
+    properties:
+      path:
+        description: 导出文件夹路径
+        type: string
+    required:
+    - path
+    type: object
+  name: export_layers_as_png
+- description: 导出图层用于Web
+  input_schema:
+    properties:
+      format:
+        description: 格式 (png/jpg/gif)
+        type: string
+      path:
+        description: 导出路径
+        type: string
+    required:
+    - path
+    type: object
+  name: export_layers_web
+- description: 导出画板
+  input_schema:
+    properties:
+      path:
+        description: 导出路径
+        type: string
+    required:
+    - path
+    type: object
+  name: export_artboards
+- description: 创建缩略图
+  input_schema:
+    properties:
+      height:
+        description: 缩略图高度
+        type: integer
+      width:
+        description: 缩略图宽度
+        type: integer
+    type: object
+  name: create_thumbnail
+- description: 保存为PDF
+  input_schema:
+    properties:
+      path:
+        description: PDF文件路径
+        type: string
+    required:
+    - path
+    type: object
+  name: save_as_pdf
+- description: 保存为TGA
+  input_schema:
+    properties:
+      path:
+        description: TGA文件路径
+        type: string
+    required:
+    - path
+    type: object
+  name: save_as_tga
+- description: 修整图像
+  input_schema:
+    properties:
+      based_on:
+        description: 基于 (topleftpixel/toprightpixel/bottomleftpixel/bottomrightpixel)
+        type: string
+    type: object
+  name: trim
+- description: 获取当前工具
+  input_schema:
+    properties: {}
+    type: object
+  name: current_tool
+- description: 切换颜色校样
+  input_schema:
+    properties: {}
+    type: object
+  name: toggle_proof_colors
+- description: 操作通道
+  input_schema:
+    properties:
+      channel_name:
+        description: 通道名称 (Red/Green/Blue)
+        type: string
+    type: object
+  name: operate_channels
+- description: 添加石板效果
+  input_schema:
+    properties:
+      texture:
+        description: 纹理类型
+        type: string
+    type: object
+  name: add_slate
+- description: Session方式Hello World
+  input_schema:
+    properties:
+      text:
+        description: 文本内容
+        type: string
+    type: object
+  name: session_hello_world
+- description: Session方式新建文档
+  input_schema:
+    properties:
+      height:
+        description: 文档高度
+        type: integer
+      width:
+        description: 文档宽度
+        type: integer
+    type: object
+  name: session_new_document
+- description: 应用智能锐化滤镜
+  input_schema:
+    properties:
+      amount:
+        description: 锐化强度 (0-500)
+        type: number
+      noise:
+        description: 降噪百分比 (0-100)
+        type: integer
+      radius:
+        description: 锐化半径 (像素)
+        type: number
+    type: object
+  name: smart_sharpen
+- description: 应用高斯模糊
+  input_schema:
+    properties:
+      radius:
+        description: 模糊半径 (像素)
+        type: number
+    type: object
+  name: gaussian_blur
+- description: 边缘检测
+  input_schema:
+    properties: {}
+    type: object
+  name: edge_detect
+- description: 浮雕效果
+  input_schema:
+    properties:
+      amount:
+        description: 浮雕强度 (1-500)
+        type: integer
+      angle:
+        description: 浮雕角度 (0-360)
+        type: integer
+      height:
+        description: 浮雕高度 (1-10)
+        type: integer
+    type: object
+  name: emboss
+- description: 结晶滤镜
+  input_schema:
+    properties:
+      cell_size:
+        description: 晶格大小 (3-300)
+        type: integer
+    type: object
+  name: crystallize
+- description: 添加新图层
+  input_schema:
+    properties:
+      name:
+        description: 图层名称
+        type: string
+    type: object
+  name: add_layer
+- description: 复制当前图层
+  input_schema:
+    properties:
+      name:
+        description: 新图层名称
+        type: string
+    type: object
+  name: duplicate_layer
+- description: 合并图层
+  input_schema:
+    properties: {}
+    type: object
+  name: merge_layers
+- description: 删除当前图层
+  input_schema:
+    properties: {}
+    type: object
+  name: delete_layer
+- description: 设置图层混合模式
+  input_schema:
+    properties:
+      mode:
+        description: 混合模式 (normal/overlay/soft_light/hard_light等)
+        type: string
+    type: object
+  name: layer_blend_mode
+- description: 设置图层透明度
+  input_schema:
+    properties:
+      opacity:
+        description: 透明度 (0-100)
+        type: number
+    type: object
+  name: layer_opacity
+- description: 锁定图层
+  input_schema:
+    properties:
+      what:
+        description: 锁定类型 (pixels/position/transparency/all)
+        type: string
+    type: object
+  name: layer_lock
+- description: 全选
+  input_schema:
+    properties: {}
+    type: object
+  name: select_all
+- description: 取消选择
+  input_schema:
+    properties: {}
+    type: object
+  name: deselect
+- description: 反选
+  input_schema:
+    properties: {}
+    type: object
+  name: invert_selection
+- description: 扩展选区
+  input_schema:
+    properties:
+      pixels:
+        description: 扩展像素数
+        type: integer
+    type: object
+  name: expand_selection
+- description: 收缩选区
+  input_schema:
+    properties:
+      pixels:
+        description: 收缩像素数
+        type: integer
+    type: object
+  name: contract_selection
+- description: 羽化选区
+  input_schema:
+    properties:
+      radius:
+        description: 羽化半径 (像素)
+        type: number
+    type: object
+  name: feather_selection
+- description: 裁剪图像
+  input_schema:
+    properties: {}
+    type: object
+  name: crop
+version: 1.0.0

@@ -31,9 +31,38 @@ Photoshop 快捷键自动化工具 - v3.0
 import pyautogui
 import pywinauto
 from pywinauto.application import Application
+from pywinauto import Desktop
 import time
 import sys
 import argparse
+import re
+
+try:
+    import pygetwindow as gw
+except ImportError:  # pygetwindow is optional
+    gw = None
+
+TOOL_MAP = {
+    'move': {'key': 'v', 'name': '移动工具 (Move Tool)'},
+    'marquee': {'key': 'm', 'name': '矩形/椭圆选框工具 (Marquee)'},
+    'lasso': {'key': 'l', 'name': '套索工具 (Lasso)'},
+    'magic_wand': {'key': 'w', 'name': '魔棒/快速选择工具 (Magic Wand)'},
+    'crop': {'key': 'c', 'name': '裁剪工具 (Crop)'},
+    'eyedropper': {'key': 'i', 'name': '吸管工具 (Eyedropper)'},
+    'spot_heal': {'key': 'j', 'name': '污点修复画笔工具 (Spot Healing Brush)'},
+    'clone_stamp': {'key': 's', 'name': '仿制图章工具 (Clone Stamp)'},
+    'history_brush': {'key': 'y', 'name': '历史记录画笔工具 (History Brush)'},
+    'eraser': {'key': 'e', 'name': '橡皮擦工具 (Eraser)'},
+    'paint_bucket': {'key': 'g', 'name': '油漆桶/渐变工具 (Paint Bucket/Gradient)'},
+    'dodge': {'key': 'o', 'name': '减淡/加深工具 (Dodge/Burn)'},
+    'pen': {'key': 'p', 'name': '钢笔工具 (Pen)'},
+    'type': {'key': 't', 'name': '横排文字工具 (Type)'},
+    'path_select': {'key': 'a', 'name': '路径/直接选择工具 (Path Select)'},
+    'shape': {'key': 'u', 'name': '矩形/椭圆工具 (Shape)'},
+    'hand': {'key': 'h', 'name': '抓手工具 (Hand)'},
+    'rotate_view': {'key': 'r', 'name': '旋转视图工具 (Rotate View)'},
+    'zoom': {'key': 'z', 'name': '缩放工具 (Zoom)'},
+}
 
 def find_photoshop_window():
     """查找Photoshop窗口"""
@@ -41,18 +70,64 @@ def find_photoshop_window():
 
     try:
         # 多种模式匹配窗口
-        patterns = [r'.*Photoshop.*', r'.*PS.*', r'.*\.psd.*', r'.*Adobe.*']
+        pattern_strings = [
+            r'.*Photoshop.*',
+            r'.*PS.*',
+            r'.*\.(psd|psb).*',
+            r'.*Adobe.*',
+            r'.*\.(png|jpg|jpeg|tif|bmp).*@.*',
+        ]
+        patterns = [re.compile(pat, re.IGNORECASE) for pat in pattern_strings]
 
-        for pattern in patterns:
+        def title_matches(title):
+            return any(pat.search(title) for pat in patterns)
+
+        # 1) 快速路径: 先用 pygetwindow 获取窗口句柄，避免多次 connect
+        if gw is not None:
             try:
-                app = Application(backend='uia').connect(title_re=pattern, timeout=2)
+                titles = [t for t in gw.getAllTitles() if t]
+                quick_hits = [t for t in titles if title_matches(t)]
+                for title in quick_hits:
+                    try:
+                        handles = gw.getWindowsWithTitle(title)
+                        if not handles:
+                            continue
+                        handle = getattr(handles[0], "_hWnd", None)
+                        if not handle:
+                            continue
+                        app = Application(backend='uia').connect(handle=handle, timeout=1)
+                        win = app.window(handle=handle)
+                        print(f"[OK] 找到窗口: {win.window_text()} (快速匹配)")
+                        return app, win
+                    except Exception:
+                        continue
+            except Exception as quick_err:
+                print(f"[INFO] 快速匹配失败，将逐个匹配: {quick_err}")
+
+        # 2) 回退: 按正则逐个匹配（缩短超时）
+        for pat in patterns:
+            try:
+                app = Application(backend='uia').connect(title_re=pat, timeout=1)
                 win = app.top_window()
                 print(f"[OK] 找到窗口: {win.window_text()}")
                 return app, win
-            except:
+            except Exception:
                 continue
 
         print("[FAIL] 未找到Photoshop窗口")
+        try:
+            desktop = Desktop(backend='uia')
+            titles = [
+                win.window_text()
+                for win in desktop.windows()
+                if win.window_text()
+            ]
+            if titles:
+                print("\n[INFO] 当前可见窗口标题：")
+                for title in titles[:15]:
+                    print(f"  - {title}")
+        except Exception as info_err:
+            print(f"[INFO] 无法列出窗口: {info_err}")
         return None, None
 
     except Exception as e:
@@ -62,6 +137,23 @@ def find_photoshop_window():
 def activate_window(app, win):
     """使用pywinauto激活并最大化窗口"""
     print("\n正在激活窗口...")
+
+    title = win.window_text()
+
+    # 尝试先用 pygetwindow 快速激活
+    if gw is not None and title:
+        try:
+            candidates = gw.getWindowsWithTitle(title)
+            if candidates:
+                target = candidates[0]
+                target.activate()
+                time.sleep(0.1)
+                active = gw.getActiveWindow()
+                if active and getattr(active, "_hWnd", None) == getattr(target, "_hWnd", None):
+                    print("[OK] 已通过 pygetwindow 快速激活，无需额外等待")
+                    return True
+        except Exception:
+            print("[INFO] 快速激活失败，回退到 pywinauto 方案")
 
     try:
         # 1. 设置焦点
@@ -78,9 +170,12 @@ def activate_window(app, win):
             should_maximize = True
 
         if should_maximize:
-            win.maximize()
-            time.sleep(0.2)
-            print("[OK] 窗口已最大化")
+            try:
+                win.maximize()
+                time.sleep(0.2)
+                print("[OK] 窗口已最大化")
+            except Exception as max_err:
+                print(f"[INFO] 最大化失败，继续执行: {max_err}")
         else:
             print("[OK] 窗口已处于最大化状态")
 
@@ -89,6 +184,31 @@ def activate_window(app, win):
 
     except Exception as e:
         print(f"[FAIL] 激活失败: {e}")
+        return False
+
+def send_tool_hotkey(tool_id: str, cycle: bool = False):
+    """切换 Photoshop 工具栏工具."""
+    tool = TOOL_MAP.get(tool_id)
+    if not tool:
+        print(f"[FAIL] 未知工具: {tool_id}")
+        return False
+
+    action_desc = "Shift+" if cycle else ""
+    action_desc += tool['key'].upper()
+    print("\n开始切换工具...")
+    print(f"  {tool['name']}  ({action_desc})")
+    print("\n请观察工具栏变化...")
+
+    try:
+        if cycle:
+            pyautogui.hotkey('shift', tool['key'])
+        else:
+            pyautogui.press(tool['key'])
+        time.sleep(0.2)
+        print("\n[OK] 工具切换完成")
+        return True
+    except Exception as e:
+        print(f"[FAIL] 发送失败: {e}")
         return False
 
 def send_hotkeys():
@@ -438,6 +558,12 @@ def main():
     group.add_argument('--duplicate', action='store_true',
                       help='复制图层 (Ctrl+J)')
 
+    # 工具切换
+    group.add_argument('--tool', choices=sorted(TOOL_MAP.keys()),
+                      help='切换到指定工具 (例如 move/marquee/pen 等)')
+    group.add_argument('--tool-cycle', choices=sorted(TOOL_MAP.keys()),
+                      help='使用 Shift+字母 循环工具组内选项')
+
     # 文件操作
     group.add_argument('--file-new', action='store_true',
                       help='新建文档 (Ctrl+N)')
@@ -539,6 +665,14 @@ def main():
         mode = 'undo'
         title = '撤销工具'
         description = '撤销上一步操作'
+    elif args.tool:
+        mode = 'tool'
+        title = '工具切换'
+        description = f"切换到 {args.tool}"
+    elif args.tool_cycle:
+        mode = 'tool_cycle'
+        title = '工具循环'
+        description = f"Shift 切换 {args.tool_cycle}"
 
     print("="*60)
     print(f"Photoshop 快捷键工具 - {title}")
@@ -619,6 +753,12 @@ def main():
             sys.exit(1)
     elif mode == 'undo':
         if not send_undo_hotkey():
+            sys.exit(1)
+    elif mode == 'tool':
+        if not send_tool_hotkey(args.tool, cycle=False):
+            sys.exit(1)
+    elif mode == 'tool_cycle':
+        if not send_tool_hotkey(args.tool_cycle, cycle=True):
             sys.exit(1)
 
     print("\n" + "="*60)

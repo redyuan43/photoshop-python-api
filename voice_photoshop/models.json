@@ -1,0 +1,56 @@
+[
+  {
+    "name": "GPT-4",
+    "model": "gpt-4",
+    "base_url": "https://api.openai.com/v1",
+    "description": "OpenAI GPT-4 - 最强通用模型",
+    "cost_per_token": 0.03,
+    "max_tokens": 4096,
+    "supports_json": true
+  },
+  {
+    "name": "GPT-3.5-Turbo",
+    "model": "gpt-3.5-turbo",
+    "base_url": "https://api.openai.com/v1",
+    "description": "OpenAI GPT-3.5 - 性价比高",
+    "cost_per_token": 0.002,
+    "max_tokens": 4096,
+    "supports_json": true
+  },
+  {
+    "name": "Claude-3-Sonnet",
+    "model": "claude-3-sonnet-20240229",
+    "base_url": "https://api.anthropic.com/v1",
+    "description": "Anthropic Claude 3 Sonnet - 专业可靠",
+    "cost_per_token": 0.015,
+    "max_tokens": 4096,
+    "supports_json": true
+  },
+  {
+    "name": "Qwen-14B (本地)",
+    "model": "qwen:14b-chat",
+    "base_url": "http://localhost:11434/v1",
+    "description": "阿里云通义千问 14B - 本地部署",
+    "cost_per_token": 0.0,
+    "max_tokens": 4096,
+    "supports_json": false
+  },
+  {
+    "name": "Llama2-13B (本地)",
+    "model": "llama2:13b-chat",
+    "base_url": "http://localhost:11434/v1",
+    "description": "Meta Llama2 13B - 本地部署",
+    "cost_per_token": 0.0,
+    "max_tokens": 4096,
+    "supports_json": false
+  },
+  {
+    "name": "ChatGLM3-13B (本地)",
+    "model": "chatglm3:13b",
+    "base_url": "http://localhost:11434/v1",
+    "description": "智谱 ChatGLM3 13B - 本地部署",
+    "cost_per_token": 0.0,
+    "max_tokens": 4096,
+    "supports_json": false
+  }
+]

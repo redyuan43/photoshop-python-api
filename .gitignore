@@ -23,3 +23,23 @@ venv_python
 # Docs
 docs_src/_build/
 /.windsurfrules
+
+# API密钥和配置文件（包含敏感信息）
+config.py
+config.yaml
+voice_photoshop/config.yaml
+*.key
+*.pem
+.env
+.env.local
+.env.*.local
+
+# 临时文件和日志
+logs/
+temp/
+*.log
+*.tmp
+
+# IDE配置文件
+.vscode/settings.json
+.idea/workspace.xml

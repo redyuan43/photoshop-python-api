@@ -1,0 +1,180 @@
+# 核心功能 - 图层操作
+- name: duplicate_layer
+  category: layer
+  priority: P0
+  description: "复制图层"
+  aliases:
+    - "复制图层"
+    - "复制图层"
+    - "克隆图层"
+  params:
+    target_document:
+      type: string
+      description: "目标文档名称（可选）"
+
+- name: delete_layer
+  category: layer
+  priority: P0
+  description: "删除当前图层"
+  aliases:
+    - "删除图层"
+    - "删除当前图层"
+    - "移除图层"
+
+- name: merge_layers
+  category: layer
+  priority: P0
+  description: "合并可见图层"
+  aliases:
+    - "合并图层"
+    - "拼合图层"
+    - "合并可见"
+
+- name: create_layer_set
+  category: layer
+  priority: P0
+  description: "创建图层组"
+  aliases:
+    - "创建图层组"
+    - "新建图层组"
+    - "建立图层组"
+  params:
+    name:
+      type: string
+      description: "图层组名称"
+      default: "Layer Group"
+
+- name: move_layer
+  category: layer
+  priority: P0
+  description: "移动图层"
+  aliases:
+    - "移动图层"
+    - "上移图层"
+    - "下移图层"
+  params:
+    direction:
+      type: string
+      description: "移动方向 (up/down/top/bottom/layer_up/layer_down)"
+      default: "up"
+
+- name: rename_layer
+  category: layer
+  priority: P0
+  description: "重命名图层"
+  aliases:
+    - "重命名图层"
+    - "修改图层名"
+  params:
+    name:
+      type: string
+      description: "新图层名称"
+      required: true
+
+- name: toggle_layer_visibility
+  category: layer
+  priority: P0
+  description: "切换图层可见性"
+  aliases:
+    - "隐藏图层"
+    - "显示图层"
+    - "切换图层可见"
+
+- name: lock_layer
+  category: layer
+  priority: P0
+  description: "锁定图层"
+  aliases:
+    - "锁定图层"
+    - "保护图层"
+  params:
+    lock_type:
+      type: string
+      description: "锁定类型 (all/pixels/position/transparency)"
+      default: "all"
+
+- name: unlock_layer
+  category: layer
+  priority: P0
+  description: "解锁图层"
+  aliases:
+    - "解锁图层"
+    - "取消锁定"
+
+- name: convert_to_smart_object
+  category: layer
+  priority: P1
+  description: "转换为智能对象"
+  aliases:
+    - "转换为智能对象"
+    - "创建智能对象"
+  params:
+    name:
+      type: string
+      description: "智能对象名称（可选）"
+
+- name: rasterize_layer
+  category: layer
+  priority: P1
+  description: "栅格化图层"
+  aliases:
+    - "栅格化图层"
+    - "转为像素"
+
+- name: link_layers
+  category: layer
+  priority: P1
+  description: "链接图层"
+  aliases:
+    - "链接图层"
+    - "关联图层"
+
+- name: unlink_layers
+  category: layer
+  priority: P1
+  description: "取消链接图层"
+  aliases:
+    - "取消链接"
+    - "取消关联"
+
+- name: set_layer_blend_mode
+  category: layer
+  priority: P0
+  description: "设置图层混合模式"
+  aliases:
+    - "设置混合模式"
+    - "更改混合模式"
+  params:
+    mode:
+      type: string
+      description: "混合模式"
+      default: "normal"
+      options:
+        - "normal"
+        - "multiply"
+        - "screen"
+        - "overlay"
+        - "soft_light"
+        - "hard_light"
+        - "color_dodge"
+        - "color_burn"
+        - "darken"
+        - "lighten"
+        - "difference"
+        - "exclusion"
+
+- name: set_layer_opacity
+  category: layer
+  priority: P0
+  description: "设置图层不透明度"
+  aliases:
+    - "设置不透明度"
+    - "调整透明度"
+    - "改变透明度"
+  params:
+    opacity:
+      type: int
+      description: "不透明度 (0-100)"
+      min: 0
+      max: 100
+      default: 100

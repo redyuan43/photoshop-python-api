@@ -1,0 +1,197 @@
+# Photoshop API 完整功能索引
+# 按优先级和类别组织的所有可用操作
+
+# 目录结构说明：
+# - core/ 目录包含所有核心功能（优先级P0-P2）
+# - 每个YAML文件定义一类操作
+# - 所有功能都包含别名、参数验证和描述
+
+# 类别说明：
+# document - 文档操作
+# layer - 图层操作
+# selection - 选择操作
+# transform - 变换操作
+# adjustment - 图像调整
+# filter - 滤镜效果
+# shape - 形状绘制
+# text - 文本操作
+# view - 视图操作
+# tool - 工具操作
+
+# 优先级说明：
+# P0 - 核心功能（最常用，必须实现）
+# P1 - 高级功能（专业用户，重要）
+# P2 - 专业功能（特殊需求，一般）
+# P3 - 工具功能（辅助功能，较低）
+
+# 完整功能列表文件：
+files:
+  - name: documents.yaml
+    path: actions/core/01_documents.yaml
+    category: document
+    count: 9
+    priority: P0-P1
+    description: "文档操作 - 创建、打开、保存、导出"
+    features:
+      - new_document
+      - open_document
+      - save_document
+      - save_as_psd
+      - save_as_pdf
+      - save_as_png
+      - save_as_jpeg
+      - close_document
+      - close_all_documents
+
+  - name: layers.yaml
+    path: actions/core/02_layers.yaml
+    category: layer
+    count: 17
+    priority: P0-P1
+    description: "图层操作 - 复制、删除、移动、混合模式"
+    features:
+      - duplicate_layer
+      - delete_layer
+      - merge_layers
+      - create_layer_set
+      - move_layer
+      - rename_layer
+      - toggle_layer_visibility
+      - lock_layer
+      - unlock_layer
+      - convert_to_smart_object
+      - rasterize_layer
+      - link_layers
+      - unlink_layers
+      - set_layer_blend_mode
+      - set_layer_opacity
+
+  - name: selections.yaml
+    path: actions/core/03_selections.yaml
+    category: selection
+    count: 11
+    priority: P0
+    description: "选择操作 - 全选、选区、填充、描边"
+    features:
+      - select_all
+      - deselect
+      - select_inverse
+      - create_rectangular_selection
+      - create_elliptical_selection
+      - fill_selection
+      - stroke_selection
+      - feather_selection
+      - expand_selection
+      - contract_selection
+
+  - name: transforms.yaml
+    path: actions/core/04_transforms.yaml
+    category: transform
+    count: 8
+    priority: P0
+    description: "变换操作 - 旋转、翻转、缩放、裁剪"
+    features:
+      - rotate_layer
+      - flip_horizontal
+      - flip_vertical
+      - scale_layer
+      - free_transform
+      - crop
+      - trim
+
+  - name: adjustments.yaml
+    path: actions/core/05_adjustments.yaml
+    category: adjustment
+    count: 12
+    priority: P0
+    description: "图像调整 - 亮度、对比度、色相、饱和度"
+    features:
+      - brightness_contrast
+      - hue_saturation
+      - color_balance
+      - levels
+      - curves
+      - vibrance
+      - auto_tone
+      - auto_contrast
+      - auto_color
+      - invert_colors
+      - desaturate
+
+  - name: filters.yaml
+    path: actions/core/06_filters.yaml
+    category: filter
+    count: 30
+    priority: P0-P2
+    description: "滤镜效果 - 锐化、模糊、像素化、噪点"
+    features:
+      - smart_sharpen
+      - gaussian_blur
+      - blur
+      - sharpen
+      - blur_more
+      - motion_blur
+      - radial_blur
+      - surface_blur
+      - lens_blur
+      - median_blur
+      - emboss
+      - find_edges
+      - trace_contour
+      - stylize_diffuse
+      - pixelate_mosaic
+      - pixelate_crystallize
+      - pixelate_coloring
+      - noise_add
+      - noise_dust_scratches
+      - noise_despeckle
+      - noise_median
+      - render_clouds
+      - render_difference_clouds
+      - render_fibers
+      - render_lens_flare
+      - distort_liquify
+
+  - name: shapes.yaml
+    path: actions/core/07_shapes.yaml
+    category: shape
+    count: 8
+    priority: P0-P1
+    description: "形状绘制 - 矩形、椭圆、直线、多边形"
+    features:
+      - create_rectangle
+      - create_ellipse
+      - create_circle
+      - create_line
+      - create_triangle
+      - create_star
+      - create_polygon
+
+  - name: text.yaml
+    path: actions/core/08_text.yaml
+    category: text
+    count: 11
+    priority: P0-P1
+    description: "文本操作 - 创建文字、编辑、格式化"
+    features:
+      - create_text
+      - edit_text
+      - set_text_font
+      - set_text_size
+      - set_text_color
+      - set_text_bold
+      - set_text_italic
+      - set_text_alignment
+      - warp_text
+      - convert_text_to_shape
+
+# 总计统计：
+total_files: 8
+total_features: 106
+priority_p0: 80+
+priority_p1: 20+
+priority_p2: 5+
+
+# 实现状态：
+implemented: 4/106  # 当前的4个功能（smart_sharpen, new_document, rotate_layer, create_rectangle）
+pending: 102

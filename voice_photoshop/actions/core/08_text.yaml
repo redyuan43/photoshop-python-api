@@ -1,0 +1,204 @@
+# 核心功能 - 文本操作
+- name: create_text
+  category: text
+  priority: P0
+  description: "创建文字"
+  aliases:
+    - "创建文字"
+    - "添加文字"
+    - "输入文字"
+  params:
+    text:
+      type: string
+      description: "文字内容"
+      required: true
+    x:
+      type: int
+      description: "X坐标"
+      min: 0
+      default: 100
+    y:
+      type: int
+      description: "Y坐标"
+      min: 0
+      default: 100
+    font:
+      type: string
+      description: "字体名称"
+      default: "Arial"
+    font_size:
+      type: int
+      description: "字体大小 (点)"
+      min: 1
+      max: 1000
+      default: 72
+    color:
+      type: dict
+      description: "文字颜色 (RGB字典格式)"
+      default: {"red": 0, "green": 0, "blue": 0}
+    bold:
+      type: bool
+      description: "粗体"
+      default: false
+    italic:
+      type: bool
+      description: "斜体"
+      default: false
+    alignment:
+      type: string
+      description: "对齐方式 (left/center/right/justify)"
+      default: "left"
+
+- name: edit_text
+  category: text
+  priority: P0
+  description: "编辑文字"
+  aliases:
+    - "编辑文字"
+    - "修改文字"
+    - "更改文字"
+  params:
+    text:
+      type: string
+      description: "新文字内容"
+      required: true
+
+- name: set_text_font
+  category: text
+  priority: P0
+  description: "设置文字字体"
+  aliases:
+    - "设置字体"
+    - "更改字体"
+  params:
+    font:
+      type: string
+      description: "字体名称"
+      required: true
+
+- name: set_text_size
+  category: text
+  priority: P0
+  description: "设置文字大小"
+  aliases:
+    - "设置字号"
+    - "调整文字大小"
+  params:
+    size:
+      type: int
+      description: "字体大小 (点)"
+      min: 1
+      max: 1000
+      required: true
+
+- name: set_text_color
+  category: text
+  priority: P0
+  description: "设置文字颜色"
+  aliases:
+    - "设置文字颜色"
+    - "更改文字颜色"
+  params:
+    color:
+      type: dict
+      description: "文字颜色 (RGB字典格式)"
+      required: true
+
+- name: set_text_bold
+  category: text
+  priority: P0
+  description: "设置粗体"
+  aliases:
+    - "设置粗体"
+    - "加粗文字"
+  params:
+    bold:
+      type: bool
+      description: "是否粗体"
+      default: true
+
+- name: set_text_italic
+  category: text
+  priority: P0
+  description: "设置斜体"
+  aliases:
+    - "设置斜体"
+    - "倾斜文字"
+  params:
+    italic:
+      type: bool
+      description: "是否斜体"
+      default: true
+
+- name: set_text_alignment
+  category: text
+  priority: P0
+  description: "设置文字对齐"
+  aliases:
+    - "设置对齐"
+    - "文字对齐"
+  params:
+    alignment:
+      type: string
+      description: "对齐方式"
+      required: true
+      options:
+        - "left"
+        - "center"
+        - "right"
+        - "justify"
+
+- name: warp_text
+  category: text
+  priority: P1
+  description: "变形文字"
+  aliases:
+    - "变形文字"
+    - "文字变形"
+  params:
+    warp_style:
+      type: string
+      description: "变形样式"
+      default: "arc"
+      options:
+        - "arc"
+        - "arc_lower"
+        - "arc_upper"
+        - "arch"
+        - "bulge"
+        - "shell_arc_lower"
+        - "shell_arc_upper"
+        - "flag"
+        - "wave"
+        - "fish"
+        - "rise"
+        - "fish_eye"
+        - "inflate"
+        - "squeeze"
+        - "twist"
+    bend:
+      type: int
+      description: "弯曲 (-100到100)"
+      min: -100
+      max: 100
+      default: 0
+    horizontal_distortion:
+      type: int
+      description: "水平扭曲 (-100到100)"
+      min: -100
+      max: 100
+      default: 0
+    vertical_distortion:
+      type: int
+      description: "垂直扭曲 (-100到100)"
+      min: -100
+      max: 100
+      default: 0
+
+- name: convert_text_to_shape
+  category: text
+  priority: P1
+  description: "转换文字为形状"
+  aliases:
+    - "转换为形状"
+    - "文字转形状"

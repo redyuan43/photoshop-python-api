@@ -1,0 +1,101 @@
+# Voice Photoshop API配置文件（请勿提交到git）
+# 复制此文件为 config.yaml 并填入你的真实API密钥
+
+# API密钥配置
+api_keys:
+  # 通义千问API密钥
+  qwen_api_key: ""  # 请填入你的通义千问API密钥
+
+  # OpenAI API密钥
+  openai_api_key: ""  # 请填入你的OpenAI API密钥
+
+  # Anthropic Claude API密钥
+  anthropic_api_key: ""  # 请填入你的Anthropic API密钥
+
+  # Google AI API密钥（用于Gemma等模型）
+  google_api_key: ""  # 请填入你的Google AI API密钥
+
+# API端点配置
+api_endpoints:
+  # 通义千问API端点
+  qwen_base_url: "https://dashscope.aliyuncs.com/compatible-mode/v1"
+
+  # OpenAI API端点
+  openai_base_url: "https://api.openai.com/v1"
+
+  # Anthropic API端点
+  anthropic_base_url: "https://api.anthropic.com"
+
+# LLM模型配置
+llm:
+  # 默认模型
+  default_model: "qwen3-4b"
+
+  # 模型映射
+  models:
+    # 云端模型
+    gpt4:
+      provider: "openai"
+      model_name: "gpt-4"
+      temperature: 0.1
+      max_tokens: 4000
+
+    claude_sonnet:
+      provider: "anthropic"
+      model_name: "claude-3-sonnet-20240229"
+      temperature: 0.1
+      max_tokens: 4000
+
+    # 本地模型
+    qwen3_4b:
+      provider: "qwen"
+      model_name: "qwen3-4b"
+      temperature: 0.1
+      max_tokens: 2000
+      base_url: "http://localhost:8000/v1"
+
+    gemma3n:
+      provider: "custom"
+      model_name: "gemma:7b"
+      temperature: 0.1
+      max_tokens: 2000
+      base_url: "http://localhost:11434/v1"
+
+# 系统配置
+system:
+  name: "Voice Photoshop"
+  version: "1.0.0"
+  debug: false
+
+# ASR配置（语音识别）
+asr:
+  model: "large-v3"
+  device: "auto"
+  language: "zh"
+  sample_rate: 16000
+
+# 执行器配置
+executor:
+  max_concurrent: 5
+  timeout: 30
+  safe_mode: true
+
+# 日志配置
+logging:
+  level: "INFO"
+  format: "json"
+  file: "logs/app.log"
+
+# 路径配置
+paths:
+  actions_dir: "actions"
+  artifacts_dir: "artifacts"
+  temp_dir: "temp"
+
+# 使用说明：
+# 1. 复制此文件为 config.yaml: cp config.example.yaml config.yaml
+# 2. 在 config.yaml 中的 api_keys 部分填入你的真实API密钥
+# 3. 或者设置环境变量：
+#    export QWEN_API_KEY="your-qwen-api-key"
+#    export OPENAI_API_KEY="your-openai-api-key"
+#    export ANTHROPIC_API_KEY="your-anthropic-api-key"

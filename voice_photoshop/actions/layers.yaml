@@ -1,0 +1,35 @@
+# 图层操作类
+# Rotate Layer - 旋转图层
+- name: rotate_layer
+  category: layer
+  description: "旋转当前图层"
+  aliases: ["旋转图层", "旋转", "图层旋转"]
+  params:
+    angle:
+      type: float
+      description: "旋转角度 (度)"
+      min: -360
+      max: 360
+      default: 45.0
+
+- name: duplicate_layer
+  category: layer
+  description: "复制当前图层"
+  aliases: ["复制图层", "图层复制"]
+  params:
+    name:
+      type: string
+      description: "新图层名称"
+      default: "Copy"
+
+- name: delete_layer
+  category: layer
+  description: "删除当前图层"
+  aliases: ["删除图层", "图层删除"]
+  params: {}
+
+- name: merge_layers
+  category: layer
+  description: "合并所有可见图层"
+  aliases: ["合并图层", "图层合并"]
+  params: {}

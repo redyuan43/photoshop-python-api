@@ -1,0 +1,84 @@
+# 颜色映射配置
+# 支持自然语言颜色名称到RGB的映射
+
+# 基础颜色
+- name: 红色
+  rgb: [255, 0, 0]
+  aliases: [红, 朱红, 深红, 血红色]
+
+- name: 绿色
+  rgb: [0, 255, 0]
+  aliases: [绿, 翠绿, 深绿, 草绿]
+
+- name: 蓝色
+  rgb: [0, 0, 255]
+  aliases: [蓝, 深蓝, 海蓝, 天蓝]
+
+- name: 黄色
+  rgb: [255, 255, 0]
+  aliases: [黄, 金黄, 深黄]
+
+- name: 白色
+  rgb: [255, 255, 255]
+  aliases: [白, 纯白]
+
+- name: 黑色
+  rgb: [0, 0, 0]
+  aliases: [黑, 深黑]
+
+- name: 橙色
+  rgb: [255, 165, 0]
+  aliases: [橙, 深橙]
+
+- name: 紫色
+  rgb: [128, 0, 128]
+  aliases: [紫, 深紫, 紫罗兰]
+
+- name: 粉色
+  rgb: [255, 192, 203]
+  aliases: [粉, 粉红, 玫瑰粉]
+
+- name: 棕色
+  rgb: [165, 42, 42]
+  aliases: [棕, 深棕, 咖啡色]
+
+- name: 灰色
+  rgb: [128, 128, 128]
+  aliases: [灰, 深灰, 浅灰]
+
+- name: 青色
+  rgb: [0, 255, 255]
+  aliases: [青, 水绿]
+
+# 扩展颜色
+- name: 天蓝色
+  rgb: [135, 206, 235]
+  aliases: [天蓝, 天空蓝]
+
+- name: 深红色
+  rgb: [139, 0, 0]
+  aliases: [深红, 暗红]
+
+- name: 亮绿色
+  rgb: [50, 205, 50]
+  aliases: [亮绿, 荧光绿]
+
+- name: 金色
+  rgb: [255, 215, 0]
+  aliases: [金, 金黄, 黄金]
+
+- name: 银色
+  rgb: [192, 192, 192]
+  aliases: [银, 银色, 银灰]
+
+- name: 海军蓝
+  rgb: [0, 0, 128]
+  aliases: [海军蓝, 深蓝, 藏青]
+
+- name: 深绿色
+  rgb: [0, 100, 0]
+  aliases: [深绿, 暗绿, 墨绿]
+
+- name: 紫色
+  rgb: [75, 0, 130]
+  aliases: [深紫, 暗紫, 靛蓝]

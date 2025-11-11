@@ -1,0 +1,43 @@
+# 滤镜类动作
+# Smart Sharpen - 智能锐化
+- name: smart_sharpen
+  category: filter
+  description: "智能锐化图像，增强边缘细节"
+  aliases: ["锐化", "清晰", "锐化图像", "清晰化"]
+  params:
+    amount:
+      type: float
+      description: "锐化强度 (0-500)"
+      min: 0
+      max: 500
+      default: 100.0
+    radius:
+      type: float
+      description: "锐化半径 (像素)"
+      min: 0.1
+      max: 50
+      default: 3.0
+    noiseReduction:
+      type: int
+      description: "降噪百分比 (0-100)"
+      min: 0
+      max: 100
+      default: 20
+
+- name: gaussian_blur
+  category: filter
+  description: "高斯模糊滤镜"
+  aliases: ["模糊", "高斯模糊"]
+  params:
+    radius:
+      type: float
+      description: "模糊半径 (像素)"
+      min: 0.1
+      max: 250
+      default: 10.0
+
+- name: edge_detect
+  category: filter
+  description: "边缘检测滤镜"
+  aliases: ["边缘", "边缘检测"]
+  params: {}

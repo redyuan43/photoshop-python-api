@@ -11,6 +11,9 @@ import os
 # 添加项目根目录到路径
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+# 导入颜色管理器
+from voice_photoshop.color_manager import color_manager
+
 # 自然语言解析到API调用
 def parse_command(text):
     """解析自然语言命令，返回API调用信息"""
@@ -238,7 +241,13 @@ def execute_api(action_name, params):
                 y = params.get('y', 100)
                 width = params.get('width', 100)
                 height = params.get('height', 100)
-                color_rgb = params.get('color', {'red': 255, 'green': 100, 'blue': 100})
+
+                # 处理颜色参数 - 兼容字符串和字典格式
+                color_input = params.get('color', {'red': 255, 'green': 100, 'blue': 100})
+
+                # 处理颜色参数 - 使用动态颜色管理器
+                color_input = params.get('color', {'red': 255, 'green': 100, 'blue': 100})
+                color_rgb = color_manager.get_color(color_input)
 
                 # 设置颜色
                 color = ps.SolidColor()

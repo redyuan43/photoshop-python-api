@@ -1,0 +1,48 @@
+# 文档操作类
+# New Document - 新建文档
+- name: new_document
+  category: document
+  description: "创建新Photoshop文档"
+  aliases: ["新建文档", "创建文档", "新建画布"]
+  params:
+    width:
+      type: int
+      description: "文档宽度 (像素)"
+      min: 1
+      max: 300000
+      default: 800
+    height:
+      type: int
+      description: "文档高度 (像素)"
+      min: 1
+      max: 300000
+      default: 600
+    resolution:
+      type: int
+      description: "分辨率 (ppi)"
+      min: 72
+      max: 2400
+      default: 72
+    name:
+      type: string
+      description: "文档名称"
+      default: "Untitled"
+
+- name: open_document
+  category: document
+  description: "打开Photoshop文档"
+  aliases: ["打开文档", "打开文件"]
+  params:
+    path:
+      type: string
+      description: "文件路径"
+      required: true
+
+- name: save_document
+  category: document
+  description: "保存当前文档"
+  aliases: ["保存文档", "保存文件"]
+  params:
+    path:
+      type: string
+      description: "保存路径（可选，默认覆盖原文件）"
