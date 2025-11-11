@@ -78,6 +78,9 @@ python photoshop_hotkey_best.py --file-close
 python photoshop_hotkey_best.py --file-close-all
 python photoshop_hotkey_best.py --undo
 
+# 查询当前激活工具
+python get_current_tool.py
+
 # 查看帮助
 python photoshop_hotkey_best.py --help
 ```
@@ -134,6 +137,13 @@ python photoshop_hotkey_best.py --export-as
 python photoshop_hotkey_best.py --file-close
 python photoshop_hotkey_best.py --file-close-all
 python photoshop_hotkey_best.py --undo
+```
+
+### 4. 当前工具检测
+需要确认 Photoshop 里此刻选中的工具？运行 `get_current_tool.py` 即可读取 `app.currentTool` 并打印结果。
+
+```bash
+python get_current_tool.py
 ```
 
 ## 执行流程

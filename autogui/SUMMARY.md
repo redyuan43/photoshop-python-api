@@ -24,6 +24,10 @@
 
 
 ### 2025-11-10 新增文件快捷键
+
+### 2025-11-10 ??????
+- `python get_current_tool.py` ? ?? `patchSelection`?????? Photoshop ??????
+
 - `python photoshop_hotkey_best.py --file-save` ✅ 已找到 `δ数据-333.psd` 并发送 Ctrl+S
 - `python photoshop_hotkey_best.py --file-save` ⚠️ 第二次运行时窗口空白导致 pywinauto 无法再激活
 - `python photoshop_hotkey_best.py --undo` ⚠️ 未发送 Ctrl+Z，同步问题
