@@ -66,13 +66,23 @@ def activate_window(app, win):
     try:
         # 1. 设置焦点
         win.set_focus()
-        time.sleep(0.5)
+        time.sleep(0.2)
         print("[OK] 已设置焦点")
 
-        # 2. 最大化窗口
-        win.maximize()
-        time.sleep(0.5)
-        print("[OK] 窗口已最大化")
+        # 2. 如有必要再最大化窗口，避免不必要的等待
+        should_maximize = True
+        try:
+            if hasattr(win, "is_maximized"):
+                should_maximize = not win.is_maximized()
+        except Exception:
+            should_maximize = True
+
+        if should_maximize:
+            win.maximize()
+            time.sleep(0.2)
+            print("[OK] 窗口已最大化")
+        else:
+            print("[OK] 窗口已处于最大化状态")
 
         print("[OK] 窗口激活完成")
         return True
