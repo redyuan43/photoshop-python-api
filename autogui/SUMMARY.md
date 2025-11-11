@@ -24,13 +24,14 @@
 
 
 ### 2025-11-10 新增文件快捷键
-
-### 2025-11-10 ??????
-- `python get_current_tool.py` ? ?? `patchSelection`?????? Photoshop ??????
-
 - `python photoshop_hotkey_best.py --file-save` ✅ 已找到 `δ数据-333.psd` 并发送 Ctrl+S
-- `python photoshop_hotkey_best.py --file-save` ⚠️ 第二次运行时窗口空白导致 pywinauto 无法再激活
-- `python photoshop_hotkey_best.py --undo` ⚠️ 未发送 Ctrl+Z，同步问题
+- `python photoshop_hotkey_best.py --file-save` ⚠️ 第二次运行窗口标题空白，pywinauto 无法再激活
+- `python photoshop_hotkey_best.py --undo` ⚠️ 同原因未发送 Ctrl+Z
+
+### 2025-11-10 状态查询
+- `python get_current_tool.py` ✅ 输出 `patchSelection`，用于校验当前工具
+- `python get_photoshop_status.py` ✅ 返回 JSON：当前工具 `moveTool`，活动文档 `Screenshot 2025-08-12 161346.png`，当前层“图层1，无选区，前景黑 / 背景白
+
 ## 📁 文件清单
 
 ### 1. photoshop_hotkey_auto.py ⭐ **推荐使用**

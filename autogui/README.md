@@ -81,6 +81,9 @@ python photoshop_hotkey_best.py --undo
 # 查询当前激活工具
 python get_current_tool.py
 
+# 获取 Photoshop 状态快照
+python get_photoshop_status.py
+
 # 查看帮助
 python photoshop_hotkey_best.py --help
 ```
@@ -144,6 +147,32 @@ python photoshop_hotkey_best.py --undo
 
 ```bash
 python get_current_tool.py
+```
+
+### 5. Photoshop 状态快照
+`get_photoshop_status.py` 会输出 JSON，其中包含：
+- 当前工具名称
+- 当前文档（名称 / 路径 / 尺寸 / 模式 / 色彩配置 / 图层数）
+- 当前图层（名称 / 类型 / 可见性 / 锁定 / 透明度）
+- 是否存在选区及其边界
+- 前景色 / 背景色（RGB 通道）
+
+示例：
+
+```bash
+python get_photoshop_status.py
+```
+
+输出：
+
+```json
+{
+  "tool": "patchSelection",
+  "document": { "...": "..." },
+  "layer": { "...": "..." },
+  "selection": { "has_selection": false, "bounds": null },
+  "colors": { "foreground": { "rgb": { "red": 0, "green": 0, "blue": 0 } } }
+}
 ```
 
 ## 执行流程
