@@ -54,6 +54,11 @@ The following actions live in `photoshop_hotkey_best.py` and can be triggered vi
 | reset | *(default)* | Reset workspace (Alt+W, K, R) | Alt+W → K → R |
 | layer_up | `--layer-up` | Move layer up | Ctrl+} |
 | layer_down | `--layer-down` | Move layer down | Ctrl+{ |
+| duplicate | `--duplicate` | Duplicate layer | Ctrl+J |
+| selection_layer_up | `--selection-layer-up` | Select previous layer | Alt+] |
+| selection_layer_down | `--selection-layer-down` | Select next layer | Alt+[ |
+| selection_layer_up | `--selection-layer-up` | Select previous layer | Alt+] |
+| selection_layer_down | `--selection-layer-down` | Select next layer | Alt+[ |
 | selection_layer_up | `--selection_layer_up` | Move layer up | Alt+] |
 | selection_layer_down | `--selection_layer_down` | Move layer down | Alt+[ |
 | selection_up | `--selection-up` | Nudge selection upward | Ctrl+↑ |
@@ -63,7 +68,7 @@ The following actions live in `photoshop_hotkey_best.py` and can be triggered vi
 | select_all | `--select-all` | Select all | Ctrl+A |
 | deselect | `--deselect` | Deselect | Ctrl+D |
 | invert | `--invert` | Invert selection | Ctrl+Shift+I |
-| duplicate | `--duplicate` | Duplicate layer | Ctrl+J |
+
 | file_new | `--file-new` | New document | Ctrl+N |
 | file_open | `--file-open` | Open document | Ctrl+O |
 | file_save | `--file-save` | Save document | Ctrl+S |
@@ -72,5 +77,6 @@ The following actions live in `photoshop_hotkey_best.py` and can be triggered vi
 | file_close | `--file-close` | Close current document | Ctrl+W |
 | file_close_all | `--file-close-all` | Close all documents | Ctrl+Alt+W |
 | undo | `--undo` | Undo last action | Ctrl+Z |
+| screenshot | `python screenshot_photoshop.py --out shots/<timestamp>.png` | Capture the current Photoshop window screenshot | Taskbar activation + window capture |
 
 `tool_llm_runner.py` considers both the tool table and this command list when translating natural-language instructions into actual Photoshop hotkeys.

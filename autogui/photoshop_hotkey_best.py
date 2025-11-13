@@ -69,7 +69,7 @@ def find_photoshop_window():
     print("正在搜索Photoshop窗口...")
 
     try:
-        # 多种模式匹配窗口
+        # 多种模式匹配窗口scoei
         pattern_strings = [
             r'.*Photoshop.*',
             r'.*PS.*',
@@ -497,34 +497,34 @@ def main():
 示例:
 
 【基本功能】
-  python photoshop_hotkey_v3.py                        # 复位基本功能
+  python photoshop_hotkey_best.py.py                        # 复位基本功能
 
 【图层操作】
-  python photoshop_hotkey_v3.py --layer-move           # 上下移动图层
-  python photoshop_hotkey_v3.py --layer-up             # 图层向上移动
-  python photoshop_hotkey_v3.py --layer-down           # 图层向下移动
+  python photoshop_hotkey_best.py.py --layer-move           # 上下移动图层
+  python photoshop_hotkey_best.py.py --layer-up             # 图层向上移动
+  python photoshop_hotkey_best.py.py --layer-down           # 图层向下移动
 
 【选区操作】
-  python photoshop_hotkey_v3.py --selection-up         # 选区向上移动
-  python photoshop_hotkey_v3.py --selection-down       # 选区向下移动
-  python photoshop_hotkey_v3.py --selection-left       # 选区向左移动
-  python photoshop_hotkey_v3.py --selection-right      # 选区向右移动
+  python photoshop_hotkey_best.py.py --selection-up         # 选区向上移动
+  python photoshop_hotkey_best.py.py --selection-down       # 选区向下移动
+  python photoshop_hotkey_best.py.py --selection-left       # 选区向左移动
+  python photoshop_hotkey_best.py.py --selection-right      # 选区向右移动
 
 【选区管理】
-  python photoshop_hotkey_v3.py --select-all           # 全选图层
-  python photoshop_hotkey_v3.py --deselect             # 取消选区
-  python photoshop_hotkey_v3.py --invert               # 反选
-  python photoshop_hotkey_v3.py --duplicate            # 复制图层
+  python photoshop_hotkey_best.py.py --select-all           # 全选图层
+  python photoshop_hotkey_best.py.py --deselect             # 取消选区
+  python photoshop_hotkey_best.py.py --invert               # 反选
+  python photoshop_hotkey_best.py.py --duplicate            # 复制图层
 
 【文件操作】
-  python photoshop_hotkey_v3.py --file-new             # 新建文档
-  python photoshop_hotkey_v3.py --file-open            # 打开文档
-  python photoshop_hotkey_v3.py --file-save            # 保存文档
-  python photoshop_hotkey_v3.py --file-save-as         # 另存为
-  python photoshop_hotkey_v3.py --export-as            # 导出文件
-  python photoshop_hotkey_v3.py --file-close           # 关闭当前文档
-  python photoshop_hotkey_v3.py --file-close-all       # 关闭所有文档
-  python photoshop_hotkey_v3.py --undo                 # 撤销上一步
+  python photoshop_hotkey_best.py.py --file-new             # 新建文档
+  python photoshop_hotkey_best.py.py --file-open            # 打开文档
+  python photoshop_hotkey_best.py.py --file-save            # 保存文档
+  python photoshop_hotkey_best.py.py --file-save-as         # 另存为
+  python photoshop_hotkey_best.py.py --export-as            # 导出文件
+  python photoshop_hotkey_best.py.py --file-close           # 关闭当前文档
+  python photoshop_hotkey_best.py.py --file-close-all       # 关闭所有文档
+  python photoshop_hotkey_best.py.py --undo                 # 撤销上一步
         """
     )
 

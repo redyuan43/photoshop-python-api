@@ -6,7 +6,8 @@
       "Bash(mkdir:*)",
       "Bash(mv:*)",
       "Bash(cp:*)",
-      "Bash(rm:*)"
+      "Bash(rm:*)",
+      "Bash(git config:*)"
     ],
     "deny": [],
     "ask": []

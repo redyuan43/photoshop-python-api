@@ -295,3 +295,14 @@ We value thorough testing to ensure reliability:
 8. **Merge**: Once approved, your PR will be merged
 
 Thank you for contributing to the Photoshop Python API project! 🎉
+
+## Photoshop Automation Toolkit (autogui/Photoshop Automation)
+
+The `autogui/photoshop_automation/` package adds a high-level bridge between Photoshop state, CLI hotkeys, and LLM planners:
+
+- `tool_loader.py` / `tool_mapper.py` parse `docs/autogui/TOOLS_MAPPING.md` and map natural language (e.g., “裁剪”“移动”) to `--tool` / command options.
+- `get_layer_info.py` / `get_doc_info.py` wrap `get_photoshop_status.py` so scripts can quickly read current tool, visibility, and document size.
+- `executors/cli_executor.py` runs `photoshop_hotkey_best.py`; `script_executor.py` and `uxp_executor.py` reserve slots for JSX/UXP bridges.
+- `prompts/base_tool_prompt.txt` stores reusable LLM prompt templates; `llm_planner.py` composes prompts, loads state, calls the model, and outputs actions (e.g., `--tool lasso`, `--deselect`, `--file-save`).
+
+Together with `tool_llm_runner.py` you can build a full loop: read Photoshop state → LLM decision → CLI execution → `get_current_tool.py` verification.

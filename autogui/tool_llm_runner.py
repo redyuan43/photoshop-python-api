@@ -17,8 +17,9 @@ import json
 import os
 import subprocess
 import sys
+from datetime import datetime
 from pathlib import Path
-from typing import Dict, List
+from typing import Any, Dict, List
 
 from openai import OpenAI
 
@@ -32,6 +33,9 @@ try:
 except Exception:  # pylint: disable=broad-except
     APIConfig = None  # type: ignore
 
+
+SCREENSHOT_SCRIPT = Path(__file__).resolve().parent / "screenshot_photoshop.py"
+DEFAULT_SCREENSHOT_DIR = Path(__file__).resolve().parent / "shots"
 
 OTHER_ACTIONS = {
     "reset": {"args": [], "description": "复位工具 (Alt+W, K, R)"},
@@ -54,6 +58,13 @@ OTHER_ACTIONS = {
     "file_close": {"args": ["--file-close"], "description": "关闭当前文档 (Ctrl+W)"},
     "file_close_all": {"args": ["--file-close-all"], "description": "关闭所有文档 (Ctrl+Alt+W)"},
     "undo": {"args": ["--undo"], "description": "撤销 (Ctrl+Z)"},
+    "screenshot": {
+        "runner": "script",
+        "script": SCREENSHOT_SCRIPT,
+        "description": "截取当前 Photoshop 窗口截图",
+        "output_dir": DEFAULT_SCREENSHOT_DIR,
+        "filename_template": "photoshop_{timestamp}.png",
+    },
 }
 
 
@@ -115,11 +126,18 @@ def build_tool_summary(mapping: Dict[str, Dict[str, List[str]]]) -> str:
     return "\n".join(lines)
 
 
-def build_action_summary(mapping: Dict[str, Dict[str, List[str]]]) -> str:
+def build_action_summary(mapping: Dict[str, Dict[str, Any]]) -> str:
     lines = []
     for key, data in mapping.items():
-        args = " ".join(data["args"]) if data["args"] else "(默认模式)"
-        lines.append(f"- {key}: {data['description']}；CLI: {args}")
+        runner = data.get("runner", "hotkey")
+        if runner == "script":
+            script_path = Path(str(data.get("script", "")))
+            template = data.get("filename_template", "output.png")
+            cli = f"python {script_path.name} --out {template}"
+        else:
+            args_list = data.get("args", [])
+            cli = " ".join(args_list) if args_list else "(默认模式)"
+        lines.append(f"- {key}: {data['description']}；CLI: {cli}")
     return "\n".join(lines)
 
 
@@ -204,6 +222,14 @@ def run_photoshop_command(args: List[str]) -> subprocess.CompletedProcess:
         text=True,
     )
     return proc
+
+
+def run_python_script(script_path: Path, extra_args: List[str]) -> subprocess.CompletedProcess:
+    return subprocess.run(
+        [sys.executable, str(script_path)] + extra_args,
+        capture_output=True,
+        text=True,
+    )
 
 
 def confirm_current_tool() -> str:
@@ -326,7 +352,42 @@ def main():
                 planner.reset_dialog()
                 return
 
-            args_list = OTHER_ACTIONS[action_id]["args"]
+            entry = OTHER_ACTIONS[action_id]
+            runner = entry.get("runner", "hotkey")
+
+            if runner == "script":
+                script_path = entry.get("script")
+                if not script_path:
+                    print("[FAIL] 未配置脚本路径，无法执行该命令")
+                    planner.reset_dialog()
+                    return
+                timestamp_fmt = entry.get("timestamp_format", "%Y%m%d_%H%M%S")
+                timestamp = datetime.now().strftime(timestamp_fmt)
+                filename_template = entry.get("filename_template", f"{action_id}_{timestamp}")
+                try:
+                    filename = filename_template.format(timestamp=timestamp, action=action_id)
+                except KeyError:
+                    filename = filename_template
+                out_dir = Path(entry.get("output_dir") or DEFAULT_SCREENSHOT_DIR)
+                out_dir.mkdir(parents=True, exist_ok=True)
+                out_path = out_dir / filename
+                cmd_args = ["--out", str(out_path)]
+                preview = f"{Path(script_path).name} --out {out_path}"
+                if args.dry_run:
+                    print(f"[DRY-RUN] 将执行脚本 {preview}")
+                    return
+                result = run_python_script(Path(script_path), cmd_args)
+                if result.returncode != 0:
+                    print("[FAIL] 截图脚本执行失败：")
+                    print(result.stdout)
+                    print(result.stderr)
+                    planner.reset_dialog()
+                    return
+                print(f"[OK] 已保存截图: {out_path}")
+                planner.reset_dialog()
+                return
+
+            args_list = entry.get("args", [])
             if args.dry_run:
                 print(f"[DRY-RUN] 将执行命令 {action_id}: {' '.join(args_list) or '(默认)'}")
                 return
