@@ -31,16 +31,16 @@ Photoshop 快捷键自动化工具 - v3.0
 import pyautogui
 import pywinauto
 from pywinauto.application import Application
-from pywinauto import Desktop
 import time
 import sys
 import argparse
-import re
+from typing import Optional
 
-try:
-    import pygetwindow as gw
-except ImportError:  # pygetwindow is optional
-    gw = None
+import uiautomation as auto
+import win32gui
+
+DEFAULT_TASKBAR_NAME = "Adobe Photoshop 2025 - 1 running window"
+
 
 TOOL_MAP = {
     'move': {'key': 'v', 'name': '移动工具 (Move Tool)'},
@@ -64,104 +64,61 @@ TOOL_MAP = {
     'zoom': {'key': 'z', 'name': '缩放工具 (Zoom)'},
 }
 
-def find_photoshop_window():
-    """查找Photoshop窗口"""
-    print("正在搜索Photoshop窗口...")
+def _get_taskbar_control():
+    hwnd = win32gui.FindWindow("Shell_TrayWnd", None)
+    if hwnd:
+        return auto.ControlFromHandle(hwnd)
+    return auto.WindowControl(ClassName="Shell_TrayWnd")
 
-    try:
-        # 多种模式匹配窗口scoei
-        pattern_strings = [
-            r'.*Photoshop.*',
-            r'.*PS.*',
-            r'.*\.(psd|psb).*',
-            r'.*Adobe.*',
-            r'.*\.(png|jpg|jpeg|tif|bmp).*@.*',
-        ]
-        patterns = [re.compile(pat, re.IGNORECASE) for pat in pattern_strings]
 
-        def title_matches(title):
-            return any(pat.search(title) for pat in patterns)
+def _activate_photoshop_via_taskbar(button_name: str) -> Optional[int]:
+    taskbar = _get_taskbar_control()
+    if not taskbar or not taskbar.Exists(0, 0):
+        print("[FAIL] Taskbar not found.")
+        return None
 
-        # 1) 快速路径: 先用 pygetwindow 获取窗口句柄，避免多次 connect
-        if gw is not None:
-            try:
-                titles = [t for t in gw.getAllTitles() if t]
-                quick_hits = [t for t in titles if title_matches(t)]
-                for title in quick_hits:
-                    try:
-                        handles = gw.getWindowsWithTitle(title)
-                        if not handles:
-                            continue
-                        handle = getattr(handles[0], "_hWnd", None)
-                        if not handle:
-                            continue
-                        app = Application(backend='uia').connect(handle=handle, timeout=1)
-                        win = app.window(handle=handle)
-                        print(f"[OK] 找到窗口: {win.window_text()} (快速匹配)")
-                        return app, win
-                    except Exception:
-                        continue
-            except Exception as quick_err:
-                print(f"[INFO] 快速匹配失败，将逐个匹配: {quick_err}")
+    bridge = taskbar.PaneControl(ClassName="Windows.UI.Composition.DesktopWindowContentBridge")
+    if not bridge.Exists(0, 0):
+        bridge = taskbar
 
-        # 2) 回退: 按正则逐个匹配（缩短超时）
-        for pat in patterns:
-            try:
-                app = Application(backend='uia').connect(title_re=pat, timeout=1)
-                win = app.top_window()
-                print(f"[OK] 找到窗口: {win.window_text()}")
-                return app, win
-            except Exception:
-                continue
+    button = bridge.ButtonControl(Name=button_name)
+    if not button.Exists(0, 0):
+        button = bridge.ButtonControl(searchDepth=10, SubName="Photoshop")
+        if not button.Exists(0, 0):
+            print(f"[FAIL] Taskbar button '{button_name}' not found.")
+            return None
 
-        print("[FAIL] 未找到Photoshop窗口")
-        try:
-            desktop = Desktop(backend='uia')
-            titles = [
-                win.window_text()
-                for win in desktop.windows()
-                if win.window_text()
-            ]
-            if titles:
-                print("\n[INFO] 当前可见窗口标题：")
-                for title in titles[:15]:
-                    print(f"  - {title}")
-        except Exception as info_err:
-            print(f"[INFO] 无法列出窗口: {info_err}")
+    button.Click()
+    time.sleep(0.5)
+    hwnd = win32gui.GetForegroundWindow()
+    if not hwnd:
+        print("[FAIL] 激活失败，未检测到前台窗口。")
+        return None
+    return hwnd
+
+
+def find_photoshop_window(taskbar_name: str):
+    """通过任务栏按钮激活 Photoshop 窗口。"""
+    print("正在通过任务栏激活 Photoshop 窗口...")
+    hwnd = _activate_photoshop_via_taskbar(taskbar_name)
+    if not hwnd:
         return None, None
-
-    except Exception as e:
-        print(f"[FAIL] 搜索出错: {e}")
+    try:
+        app = Application(backend='uia').connect(handle=hwnd, timeout=2)
+        win = app.window(handle=hwnd)
+        print(f"[OK] 激活窗口: {win.window_text()}")
+        return app, win
+    except Exception as exc:
+        print(f"[FAIL] 无法连接 Photoshop 窗口: {exc}")
         return None, None
 
 def activate_window(app, win):
-    """使用pywinauto激活并最大化窗口"""
+    """使用 pywinauto 再次确保窗口处于焦点/最大化状态。"""
     print("\n正在激活窗口...")
-
-    title = win.window_text()
-
-    # 尝试先用 pygetwindow 快速激活
-    if gw is not None and title:
-        try:
-            candidates = gw.getWindowsWithTitle(title)
-            if candidates:
-                target = candidates[0]
-                target.activate()
-                time.sleep(0.1)
-                active = gw.getActiveWindow()
-                if active and getattr(active, "_hWnd", None) == getattr(target, "_hWnd", None):
-                    print("[OK] 已通过 pygetwindow 快速激活，无需额外等待")
-                    return True
-        except Exception:
-            print("[INFO] 快速激活失败，回退到 pywinauto 方案")
-
     try:
-        # 1. 设置焦点
         win.set_focus()
         time.sleep(0.2)
         print("[OK] 已设置焦点")
-
-        # 2. 如有必要再最大化窗口，避免不必要的等待
         should_maximize = True
         try:
             if hasattr(win, "is_maximized"):
@@ -181,7 +138,6 @@ def activate_window(app, win):
 
         print("[OK] 窗口激活完成")
         return True
-
     except Exception as e:
         print(f"[FAIL] 激活失败: {e}")
         return False
@@ -582,6 +538,12 @@ def main():
     group.add_argument('--undo', action='store_true',
                       help='撤销上一步 (Ctrl+Z)')
 
+    parser.add_argument(
+        '--taskbar-name',
+        default=DEFAULT_TASKBAR_NAME,
+        help='任务栏按钮名称（默认 "Adobe Photoshop 2025 - 1 running window"）',
+    )
+
     args = parser.parse_args()
 
     # 确定执行的功能
@@ -680,7 +642,7 @@ def main():
     print(f"功能: {description}")
 
     # 1. 查找窗口
-    app, win = find_photoshop_window()
+    app, win = find_photoshop_window(args.taskbar_name)
     if not app or not win:
         print("\n[FAIL] 未找到Photoshop窗口")
         print("\n请确保:")
