@@ -43,3 +43,4 @@ temp/
 # IDE配置文件
 .vscode/settings.json
 .idea/workspace.xml
+.claude/
