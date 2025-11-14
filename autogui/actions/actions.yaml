@@ -425,6 +425,31 @@ actions:
         required: false
         description: Copy merged pixels instead of active layer only.
 
+  fill_selection:
+    display_name: Fill selection
+    category: layers
+    executor: dom_api
+    callable: autogui.dom_actions:fill_selection
+    description: File > Fill… style operation on the current selection via DOM.
+    synonyms: ["fill selection", "填充选区", "fill", "Alt+Delete"]
+    params:
+      color:
+        type: string
+        required: true
+        description: Hex color (#RRGGBB) or comma-separated RGB values.
+      opacity:
+        type: number
+        required: false
+        description: Fill opacity percentage (default 100).
+      mode:
+        type: string
+        required: false
+        description: Optional blend mode name (e.g., NormalBlend, Multiply).
+      preserve_transparency:
+        type: boolean
+        required: false
+        description: Match the Photoshop “Preserve Transparency” flag.
+
   paste_to_document:
     display_name: Paste into document
     category: layers

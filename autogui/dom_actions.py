@@ -14,7 +14,7 @@ from photoshop.api import (
     PhotoshopSaveOptions,
     SaveOptions,
 )
-from photoshop.api.enumerations import OpenDocumentType
+from photoshop.api.enumerations import BlendMode, OpenDocumentType
 
 from autogui.photoshop_automation import layer_manager
 
@@ -109,6 +109,86 @@ def _resolve_open_document_type(value: Any, path_hint: Optional[Path] = None) ->
     if token_with_suffix in OpenDocumentType.__members__:
         return OpenDocumentType[token_with_suffix]
     return None
+
+
+_COLOR_NAME_MAP = {
+    "black": (0, 0, 0),
+    "white": (255, 255, 255),
+    "red": (255, 0, 0),
+    "green": (0, 255, 0),
+    "blue": (0, 0, 255),
+    "yellow": (255, 255, 0),
+    "cyan": (0, 255, 255),
+    "magenta": (255, 0, 255),
+    "gray": (128, 128, 128),
+    "grey": (128, 128, 128),
+    "红色": (255, 0, 0),
+    "绿色": (0, 255, 0),
+    "蓝色": (0, 0, 255),
+    "黄色": (255, 255, 0),
+    "青色": (0, 255, 255),
+    "洋红": (255, 0, 255),
+    "黑色": (0, 0, 0),
+    "白色": (255, 255, 255),
+    "灰色": (128, 128, 128),
+    "foreground": None,
+    "background": "background",
+}
+
+_BLEND_MODE_ALIASES = {
+    "normal": "NormalBlend",
+    "normalblend": "NormalBlend",
+    "multiply": "Multiply",
+    "screen": "Screen",
+    "overlay": "Overlay",
+    "softlight": "SoftLight",
+    "hardlight": "HardLight",
+    "colordodge": "ColorDodge",
+    "colorburn": "ColorBurn",
+    "darken": "Darken",
+    "lighten": "Lighten",
+    "difference": "Difference",
+    "exclusion": "Exclusion",
+}
+
+
+def _parse_color(ps, value) -> Any:
+    if value is None:
+        return ps.app.foregroundColor
+    if isinstance(value, str):
+        token_lower = value.strip().lower()
+        if token_lower in _COLOR_NAME_MAP:
+            preset = _COLOR_NAME_MAP[token_lower]
+            if preset is None:
+                return ps.app.foregroundColor
+            if preset == "background":
+                return ps.app.backgroundColor
+            value = preset
+    color = ps.SolidColor()
+    r = g = b = None
+    if isinstance(value, str):
+        token = value.strip()
+        if token.startswith("#"):
+            token = token[1:]
+        if len(token) == 6:
+            try:
+                r = int(token[0:2], 16)
+                g = int(token[2:4], 16)
+                b = int(token[4:6], 16)
+            except ValueError:
+                r = g = b = None
+    elif isinstance(value, (list, tuple)):
+        if len(value) == 3:
+            try:
+                r, g, b = [int(v) for v in value]
+            except Exception:
+                r = g = b = None
+    if r is None or g is None or b is None:
+        raise ValueError("Invalid color value; expected hex string like #FF0000 or [R,G,B]")
+    color.rgb.red = max(0, min(255, r))
+    color.rgb.green = max(0, min(255, g))
+    color.rgb.blue = max(0, min(255, b))
+    return color
 
 
 _DOCUMENT_INFO_FIELDS = [
@@ -517,6 +597,42 @@ def copy_selection(params: Dict[str, Any] | None = None) -> Dict[str, Any]:
         else:
             doc.selection.copy()
         return {"copied": True, "merge": merge}
+
+
+def fill_selection(params: Dict[str, Any] | None = None) -> Dict[str, Any]:
+    params = params or {}
+    color_value = params.get("color")
+    fill_opacity = params.get("fill_opacity")
+    layer_opacity = params.get("layer_opacity")
+    base_opacity = params.get("opacity")
+    if base_opacity is None:
+        base_opacity = fill_opacity if fill_opacity is not None else layer_opacity
+    if base_opacity is None:
+        base_opacity = 100.0
+    opacity = float(base_opacity)
+    preserve = bool(params.get("preserve_transparency", False))
+    mode_name = params.get("mode") or params.get("blend_mode")
+    recorded_mode = mode_name
+    if isinstance(mode_name, str):
+        key = mode_name.strip().replace(" ", "").lower()
+        mapped = _BLEND_MODE_ALIASES.get(key)
+        if mapped:
+            mode_name = mapped
+    with Session() as ps:
+        doc = _ensure_document(ps)
+        color = _parse_color(ps, color_value)
+        blend_mode = None
+        if mode_name:
+            blend_mode = getattr(BlendMode, mode_name, None) or getattr(ps.BlendMode, mode_name, None)
+            if blend_mode is None:
+                raise ValueError(f"Unknown blend mode: {mode_name}")
+        doc.selection.fill(color, blend_mode, opacity, preserve)
+        return {
+            "color": color_value or "foreground",
+            "opacity": opacity,
+            "preserve_transparency": preserve,
+            "mode": recorded_mode or mode_name,
+        }
 
 
 def paste_to_document(params: Dict[str, Any] | None = None) -> Dict[str, Any]:

@@ -204,6 +204,8 @@ class QwenToolPlanner:
 兼容命令（legacy CLI）：
 {self.legacy_summary}
 
+提示：历史对话中可能包含“上一操作”摘要，如果用户没有重新说明，可参考这些参数决定默认值。
+
 请仅输出 JSON：
 {{
   "status": "ok" | "clarify" | "unsupported",
@@ -219,6 +221,8 @@ class QwenToolPlanner:
 - target_variant 只有在切工具时需要；如果用户说“竖排文字”，请选择 vertical variant
 - 需要补充信息时返回 status="clarify" 并给出问题
 - 若需求不适用工具栏，返回 status="unsupported"
+- 颜色类参数请输出 #RRGGBB 或 [R,G,B] 数值，不要只写“蓝色”“red”
+- 不透明度/百分比请转换为 0-100 的数值
 - 只输出 JSON，不要附加解释
 """.strip()
         self.history: List[Dict[str, str]] = []
@@ -316,8 +320,18 @@ def main() -> None:
         registry_actions=registry_actions,
     )
 
+    context_messages: List[Dict[str, str]] = []
+
+    def remember_context(text: str) -> None:
+        if not text:
+            return
+        context_messages.append({"role": "assistant", "content": text})
+        if len(context_messages) > 6:
+            context_messages.pop(0)
+
     def handle_request(text: str) -> None:
         try:
+            planner.history = list(context_messages)
             planner.add_user_message(text)
             decision = planner.choose_tool()
         except Exception as exc:  # pylint: disable=broad-except
@@ -329,6 +343,18 @@ def main() -> None:
         print(json.dumps(decision, ensure_ascii=False, indent=2))
 
         status = decision.get("status")
+        action_id = decision.get("action_id") or decision.get("tool_id")
+
+        def describe_missing(action: Any, provided: Dict[str, Any]) -> List[str]:
+            missing: List[str] = []
+            for key, spec in (action.params or {}).items():
+                if not isinstance(spec, dict):
+                    continue
+                if spec.get("required"):
+                    value = provided.get(key)
+                    if value in (None, "", []):
+                        missing.append(spec.get("description") or key)
+            return missing
 
         def finalize_dialog(reason: str, extra: Optional[Dict[str, Any]] = None) -> None:
             try:
@@ -342,15 +368,29 @@ def main() -> None:
             finalize_dialog("unsupported", {"status": status})
             return
         if status == "clarify":
-            print(f"[INFO] 需要继续追问: {decision.get('clarification')}")
-            return
+            auto_continue = False
+            msg = decision.get("clarification")
+            if action_id and action_id in planner.registry_actions:
+                action = planner.registry_actions[action_id]
+                missing = describe_missing(action, decision.get("params") or {})
+                if not missing and decision.get("params"):
+                    print("[INFO] LLM 请求澄清但参数已足够，自动继续执行。")
+                    status = "ok"
+                    decision["status"] = "ok"
+                    auto_continue = True
+                elif missing:
+                    msg = msg or f"请补充参数: {', '.join(missing)}"
+            if status != "ok":
+                if not msg:
+                    msg = "需要更多信息，请补充参数。"
+                print(f"[INFO] 需要继续追问: {msg}")
+                return
         if status != "ok":
             print("[FAIL] 未知状态，停止执行")
             finalize_dialog("invalid_status", {"status": status})
             return
 
         action_type = decision.get("action_type") or ("tool" if (decision.get("action_id") in mapping) else "command")
-        action_id = decision.get("action_id") or decision.get("tool_id")
 
         if action_type == "tool":
             if not action_id or action_id not in mapping:
@@ -391,6 +431,7 @@ def main() -> None:
             final_tool = confirm_current_tool()
             print(f"[OK] 已切换到 {action_id} (变体: {target_variant or '默认'})")
             print(f"[INFO] Photoshop 当前工具: {final_tool}")
+            remember_context(f"上一操作：切换工具 {action_id}（变体 {target_variant or '默认'}），当前工具 {final_tool}")
             finalize_dialog("tool_success", {"action_id": action_id, "final_tool": final_tool})
             return
 
@@ -412,6 +453,7 @@ def main() -> None:
                         finalize_dialog("command_hotkey_failed", {"action_id": action_id, "returncode": res.return_code})
                         return
                     print(f"[OK] 已执行命令 {action_id}")
+                    remember_context(f"上一命令：{action_id} (hotkey) 已执行")
                     finalize_dialog("command_hotkey_success", {"action_id": action_id})
                     return
                 if action.executor == "python_script":
@@ -447,6 +489,9 @@ def main() -> None:
                         return
                     if res.stdout.strip():
                         print(res.stdout.strip())
+                    remember_context(
+                        f"上一命令：{action_id} (python_script) 参数 {json.dumps(context, ensure_ascii=False, default=str)}"
+                    )
                     finalize_dialog("command_script_success", {"action_id": action_id, "args": arg_list, "context": context})
                     return
                 if action.executor == "do_javascript":
@@ -459,6 +504,9 @@ def main() -> None:
                         finalize_dialog("command_jsx_failed", {"action_id": action_id, "error": res.stderr})
                         return
                     print(f"[OK] 已执行 JSX 动作 {action_id}")
+                    remember_context(
+                        f"上一命令：{action_id} (JSX) 参数 {json.dumps(merged, ensure_ascii=False, default=str)}"
+                    )
                     finalize_dialog("command_jsx_success", {"action_id": action_id})
                     return
                 if action.executor == "dom_api":
@@ -476,6 +524,9 @@ def main() -> None:
                     result_data = res.extra.get("result") if res.extra else None
                     if result_data:
                         print(json.dumps(result_data, ensure_ascii=False, indent=2))
+                    remember_context(
+                        f"上一命令：{action_id} 执行成功，参数 {json.dumps(params, ensure_ascii=False, default=str)}"
+                    )
                     finalize_dialog("command_dom_success", {"action_id": action_id, "result": result_data})
                     return
                 print(f"[FAIL] 未知执行器: {action.executor}")
@@ -517,6 +568,7 @@ def main() -> None:
                     finalize_dialog("legacy_script_failed", {"action_id": action_id, "returncode": res.return_code})
                     return
                 print(f"[OK] 已保存输出 {out_path}")
+                remember_context(f"上一命令：{action_id} (脚本) 输出 {out_path}")
                 finalize_dialog("legacy_script_success", {"action_id": action_id, "output": str(out_path)})
                 return
 
@@ -532,9 +584,10 @@ def main() -> None:
                 print(result.stderr)
                 finalize_dialog("legacy_command_failed", {"action_id": action_id, "returncode": result.returncode})
                 return
-            print(f"[OK] 已执行命令 {action_id}")
-            finalize_dialog("legacy_command_success", {"action_id": action_id})
-            return
+                print(f"[OK] 已执行命令 {action_id}")
+                remember_context(f"上一命令：{action_id} 已执行（legacy 模式）")
+                finalize_dialog("legacy_command_success", {"action_id": action_id})
+                return
 
         print("[FAIL] action_type 未知")
         finalize_dialog("unknown_action_type", {"action_type": action_type, "action_id": action_id})
