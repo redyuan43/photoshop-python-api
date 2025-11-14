@@ -248,7 +248,21 @@ class QwenToolPlanner:
         return json.loads(content)
 
 
+def bring_photoshop_to_front() -> None:
+    """Use Photoshop COM bridge to bring the app to the foreground before sending hotkeys."""
+    try:
+        from photoshop import Session  # type: ignore
+    except Exception:  # pylint: disable=broad-except
+        return
+    try:
+        with Session() as ps:  # type: ignore
+            ps.app.bringToFront()
+    except Exception:  # pylint: disable=broad-except
+        pass
+
+
 def run_photoshop_command(args: List[str]) -> subprocess.CompletedProcess[Any]:
+    bring_photoshop_to_front()
     return subprocess.run([sys.executable, str(HOTKEY_SCRIPT)] + args, capture_output=True, text=True)
 
 
