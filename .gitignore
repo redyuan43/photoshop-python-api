@@ -36,6 +36,7 @@ voice_photoshop/config.yaml
 
 # 临时文件和日志
 logs/
+autogui/logs/
 temp/
 *.log
 *.tmp

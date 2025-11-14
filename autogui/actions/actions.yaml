@@ -1,0 +1,142 @@
+version: 1 
+actions: 
+  screenshot: 
+    display_name: 截取当前窗口 
+    category: system 
+    executor: python_script 
+    script: screenshot_photoshop.py 
+    description: 截取当前 Photoshop 窗口截图并保存到指定路径。 
+    synonyms: ["截图", "截屏", "屏幕截图", "screenshot", "screen shot", "capture screen", "保存屏幕", "拍一下屏幕"] 
+    default_params: 
+      output_dir: shots 
+      filename_template: "photoshop_{timestamp}.png" 
+    args_template: 
+      - "--out" 
+      - "{output_path}" 
+ 
+  status_snapshot: 
+    display_name: 获取 Photoshop 状态 
+    category: status 
+    executor: python_script 
+    script: get_photoshop_status.py 
+    description: 使用 COM 汇总当前工具、文档、图层、选区、前景/背景色信息。 
+    synonyms: ["状态", "当前状态", "document info", "photoshop status"] 
+ 
+  reset: 
+    display_name: 复位工具 
+    category: basics 
+    executor: hotkey 
+    flags: [] 
+    description: 复位工具（等价 Alt+W, K, R 的稳定序列）。 
+    synonyms: ["复位", "重置工具", "reset"] 
+ 
+  file_save: 
+    display_name: 保存文档 
+    category: documents 
+    executor: hotkey 
+    flags: ["--file-save"] 
+    description: 保存当前文档（Ctrl+S）。 
+    synonyms: ["保存", "保存文件", "保存文档"] 
+ 
+  layer_up: 
+    display_name: 图层上移 
+    category: layers 
+    executor: hotkey 
+    flags: ["--layer-up"] 
+    description: 图层向上移动（Ctrl+}]）。 
+    synonyms: ["上移图层", "提高图层", "上一层"] 
+ 
+  hue_preset: 
+    display_name: 运行动作（色调预设） 
+    category: filters 
+    executor: do_javascript 
+    template: 'app.doAction("{ACTION_NAME}", "{ACTION_SET}");' 
+    default_params: 
+      ACTION_NAME: ApplyCyanotype 
+      ACTION_SET: MyHuePresets 
+    description: 执行 Photoshop 动作集中的指定动作（通过 app.doJavaScript）。 
+    synonyms: ["动作", "动作集", "预设", "色调预设", "hue preset", "doAction"] 
+ 
+  fit_screen: 
+    display_name: 适应屏幕 
+    category: view 
+    executor: dom_api 
+    callable: autogui.dom_actions:fit_on_screen 
+    description: 让当前文档适应屏幕，若无文档会自动新建测试文档。 
+    synonyms: ["适应屏幕", "fit", "fit screen", "放到屏幕", "全屏查看"] 
+ 
+  new_document: 
+    display_name: 创建新文档 
+    category: documents 
+    executor: dom_api 
+    callable: autogui.dom_actions:create_new_document 
+    description: 使用 COM 创建指定尺寸的新文档。 
+    synonyms: ["新建文档", "创建新图", "新画布"] 
+    params: 
+      width: 
+        type: number 
+        required: false 
+        description: 宽度（像素，默认 1920） 
+      height: 
+        type: number 
+        required: false 
+        description: 高度（像素，默认 1080） 
+      resolution: 
+        type: number 
+        required: false 
+        description: 分辨率（每英寸像素，默认 72） 
+      name: 
+        type: string 
+        required: false 
+        description: 文档名称（默认 LLM_Document） 
+ 
+  gaussian_blur: 
+    display_name: 高斯模糊 
+    category: filters 
+    executor: dom_api 
+    callable: autogui.dom_actions:apply_gaussian_blur 
+    description: 对当前图层应用高斯模糊，可指定半径。 
+    synonyms: ["模糊", "高斯", "模糊一下", "gaussian blur"] 
+    params: 
+      radius: 
+        type: number 
+        required: false 
+        description: 模糊半径，像素（默认 5.0） 
+ 
+  list_layers:
+    display_name: 列出所有图层
+    category: layers
+    executor: dom_api
+    callable: autogui.dom_actions:list_layers_flat
+    description: 返回当前文档的扁平化图层列表。
+    synonyms: ["列出图层", "有哪些图层", "show layers", "layer list"]
+
+  activate_layer_name:
+    display_name: 按名称切换图层
+    category: layers
+    executor: dom_api
+    callable: autogui.dom_actions:activate_layer_by_name_action
+    description: 根据图层名称激活对应图层。
+    synonyms: ["切换图层", "激活图层", "layer by name"]
+    params:
+      target:
+        type: string
+        required: true
+        description: 图层名称（精确匹配）
+
+  activate_layer_index:
+    display_name: 按索引切换图层
+    category: layers
+    executor: dom_api
+    callable: autogui.dom_actions:activate_layer_by_index_action
+    description: 根据扁平化索引激活图层。
+    synonyms: ["按编号图层", "layer index", "切到第几个图层"]
+    params:
+      index:
+        type: number
+        required: false
+        description: 图层扁平索引（list_layers 结果的 index），不填则默认最底层
+      position:
+        type: string
+        required: false
+        description: 可选语义位置（top/bottom/last 等），优先级高于 index
