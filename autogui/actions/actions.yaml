@@ -140,3 +140,329 @@ actions:
         type: string
         required: false
         description: 可选语义位置（top/bottom/last 等），优先级高于 index
+
+
+  list_documents:
+    display_name: List documents
+    category: documents
+    executor: dom_api
+    callable: autogui.dom_actions:list_documents
+    description: Enumerate all open Photoshop documents and return their metadata.
+    synonyms: ["list documents", "列出文档", "documents list", "open documents"]
+
+  open_document:
+    display_name: Open document
+    category: documents
+    executor: dom_api
+    callable: autogui.dom_actions:open_document
+    description: Open a PSD/PSB or supported image file in Photoshop.
+    synonyms: ["open file", "打开文档", "open psd"]
+    params:
+      path:
+        type: path
+        required: true
+        description: Absolute or relative path to the file.
+
+  open_document_as:
+    display_name: Open document as…
+    category: documents
+    executor: dom_api
+    callable: autogui.dom_actions:open_document_as
+    description: File > Open As (Shift+Ctrl+O) with optional format override.
+    synonyms: ["open as", "open format", "Shift+Ctrl+O", "鎵撳紑 format"]
+    params:
+      path:
+        type: path
+        required: true
+        description: File path to open.
+      format:
+        type: string
+        required: false
+        description: Optional format hint (e.g. psd, png, jpeg).
+
+  open_document_as_smart_object:
+    display_name: Open as Smart Object
+    category: documents
+    executor: dom_api
+    callable: autogui.dom_actions:open_document_as_smart_object
+    description: File > Open as Smart Object (Alt+Shift+Ctrl+O).
+    synonyms: ["open smart object", "smart object open", "Alt+Shift+Ctrl+O", "鎵撳紑鏅鸿兘瀵硅薄"]
+    params:
+      path:
+        type: path
+        required: true
+        description: File path to open.
+      format:
+        type: string
+        required: false
+        description: Optional format hint (e.g. psd, png, jpeg).
+
+  save_document_dom:
+    display_name: Save document (DOM)
+    category: documents
+    executor: dom_api
+    callable: autogui.dom_actions:save_document
+    description: Save the active Photoshop document via COM without hotkeys.
+    synonyms: ["save document", "保存文档", "dom save"]
+
+  save_document_as:
+    display_name: Save document as
+    category: documents
+    executor: dom_api
+    callable: autogui.dom_actions:save_document_as
+    description: Save the active document to a new path; format inferred from extension.
+    synonyms: ["save as", "另存为", "export psd"]
+    params:
+      path:
+        type: path
+        required: true
+        description: Destination path (extension decides format).
+
+  revert_document:
+    display_name: Revert document
+    category: documents
+    executor: dom_api
+    callable: autogui.dom_actions:revert_document
+    description: Revert the active document to the last saved state.
+    synonyms: ["revert", "撤销更改", "restore document"]
+
+  duplicate_document:
+    display_name: Duplicate document
+    category: documents
+    executor: dom_api
+    callable: autogui.dom_actions:duplicate_document
+    description: Duplicate the active document optionally with a new name.
+    synonyms: ["duplicate document", "复制文档", "document copy"]
+    params:
+      name:
+        type: string
+        required: false
+        description: Optional name for the duplicated document.
+
+  close_document_dom:
+    display_name: Close document
+    category: documents
+    executor: dom_api
+    callable: autogui.dom_actions:close_document
+    description: Close the active document, optionally saving changes.
+    synonyms: ["close document", "关闭文档", "close file"]
+    params:
+      save:
+        type: boolean
+        required: false
+        description: Save changes before closing (default false).
+
+  close_all_documents_dom:
+    display_name: Close all documents
+    category: documents
+    executor: dom_api
+    callable: autogui.dom_actions:close_all_documents
+    description: Close every open Photoshop document.
+    synonyms: ["close all", "关闭所有文档", "close everything"]
+    params:
+      save:
+        type: boolean
+        required: false
+        description: Save changes before closing (default false).
+
+
+
+
+  close_other_documents:
+    display_name: Close other documents
+    category: documents
+    executor: dom_api
+    callable: autogui.dom_actions:close_other_documents
+    description: Close every document except the active one (File > Close Others, Alt+Ctrl+P).
+    synonyms: ["close others", "鍏抽棴鍏朵粬鏂囨。", "Alt+Ctrl+P"]
+    params:
+      save:
+        type: boolean
+        required: false
+        description: Save changes before closing the other files.
+
+  browse_in_bridge:
+    display_name: Browse in Bridge
+    category: documents
+    executor: dom_api
+    callable: autogui.dom_actions:browse_in_bridge
+    description: Launch Adobe Bridge (Alt+Ctrl+O) optionally targeting a folder/file.
+    synonyms: ["browse bridge", "Bridge", "Alt+Ctrl+O", "鍔犺浇Bridge"]
+    params:
+      path:
+        type: path
+        required: false
+        description: Optional folder or file path for Bridge to reveal.
+
+  close_and_browse_in_bridge:
+    display_name: Close & go to Bridge
+    category: documents
+    executor: dom_api
+    callable: autogui.dom_actions:close_and_browse_in_bridge
+    description: Close the active document then call Browse in Bridge (Shift+Ctrl+W).
+    synonyms: ["close and go to bridge", "Shift+Ctrl+W", "close go bridge"]
+    params:
+      save:
+        type: boolean
+        required: false
+        description: Save the current document before closing.
+      path:
+        type: path
+        required: false
+        description: Optional folder or file path for Bridge.
+
+  save_document_copy:
+    display_name: Save a copy
+    category: documents
+    executor: dom_api
+    callable: autogui.dom_actions:save_document_copy
+    description: File > Save a Copy… (Alt+Ctrl+S) without leaving the DOM context.
+    synonyms: ["save copy", "Alt+Ctrl+S", "save a copy", "淇濆瓨澶嶅埗"]
+    params:
+      path:
+        type: path
+        required: true
+        description: Destination path for the copy.
+
+  get_document_info:
+    display_name: File info (metadata)
+    category: documents
+    executor: dom_api
+    callable: autogui.dom_actions:get_document_info
+    description: Return document metadata (File > File Info…, Alt+Shift+Ctrl+I).
+    synonyms: ["file info", "metadata", "Alt+Shift+Ctrl+I", "鏂囨。淇℃伅"]
+    params:
+      include_empty:
+        type: boolean
+        required: false
+        description: Include empty metadata fields (default false).
+
+  print_document:
+    display_name: Print document
+    category: documents
+    executor: dom_api
+    callable: autogui.dom_actions:print_document
+    description: Trigger File > Print… (Ctrl+P), optionally suppressing dialogs.
+    synonyms: ["print", "Ctrl+P", "鎵撳嵃"]
+    params:
+      show_dialogs:
+        type: boolean
+        required: false
+        description: Show Photoshop print dialogs (default true).
+
+  print_one_copy:
+    display_name: Print one copy
+    category: documents
+    executor: dom_api
+    callable: autogui.dom_actions:print_one_copy
+    description: Execute File > Print One Copy (Alt+Shift+Ctrl+P) without dialogs.
+    synonyms: ["print one copy", "Alt+Shift+Ctrl+P", "fast print"]
+
+  exit_photoshop:
+    display_name: Exit Photoshop
+    category: system
+    executor: dom_api
+    callable: autogui.dom_actions:exit_photoshop
+    description: File > Exit (Ctrl+Q) with optional force-close behavior.
+    synonyms: ["exit", "quit photoshop", "Ctrl+Q", "閫€鍑哄簲鐢?"]
+    params:
+      save:
+        type: boolean
+        required: false
+        description: When forcing, save documents before quitting (default false).
+      force:
+        type: boolean
+        required: false
+        description: Close documents automatically before quitting (default false).
+  rotate_layer:
+    display_name: Rotate active layer
+    category: layers
+    executor: dom_api
+    callable: autogui.dom_actions:rotate_active_layer
+    description: Rotate the active layer by a given angle around a specified anchor.
+    synonyms: ["rotate layer", "旋转图层", "layer rotate"]
+    params:
+      angle:
+        type: number
+        required: true
+        description: Rotation angle in degrees (positive = clockwise).
+      anchor:
+        type: string
+        required: false
+        description: Anchor position (e.g., MiddleCenter, TopLeft).
+
+  convert_layer_to_smart_object:
+    display_name: Convert layer to smart object
+    category: layers
+    executor: dom_api
+    callable: autogui.dom_actions:convert_layer_to_smart_object
+    description: Convert the active layer into a smart object via COM.
+    synonyms: ["smart object", "转换智能对象", "convert smart object"]
+
+  rasterize_layer:
+    display_name: Rasterize layer
+    category: layers
+    executor: dom_api
+    callable: autogui.dom_actions:rasterize_layer
+    description: Rasterize the active layer (entire layer by default).
+    synonyms: ["rasterize", "栅格化图层", "convert to pixels"]
+    params:
+      mode:
+        type: string
+        required: false
+        description: Rasterize mode (e.g., EntireLayer, TextContents).
+
+  copy_selection:
+    display_name: Copy selection
+    category: layers
+    executor: dom_api
+    callable: autogui.dom_actions:copy_selection
+    description: Copy the current selection to the clipboard.
+    synonyms: ["copy selection", "复制选区", "copy region"]
+    params:
+      merge:
+        type: boolean
+        required: false
+        description: Copy merged pixels instead of active layer only.
+
+  paste_to_document:
+    display_name: Paste into document
+    category: layers
+    executor: dom_api
+    callable: autogui.dom_actions:paste_to_document
+    description: Paste clipboard contents into the active document as a new layer.
+    synonyms: ["paste layer", "粘贴图层", "paste selection"]
+
+  import_image_as_layer:
+    display_name: Import image as layer
+    category: layers
+    executor: dom_api
+    callable: autogui.dom_actions:import_image_as_layer
+    description: Load an external image and duplicate it into the current document as a new layer.
+    synonyms: ["import image", "导入图层", "place image"]
+    params:
+      path:
+        type: path
+        required: true
+        description: Image file to load and place as a layer.
+
+  replace_layer_with_file:
+    display_name: Replace layer with file
+    category: layers
+    executor: dom_api
+    callable: autogui.dom_actions:replace_layer_with_file
+    description: Replace the active (smart object) layer contents with another file; falls back to placing a new layer.
+    synonyms: ["replace image", "替换图层", "replace smart object"]
+    params:
+      path:
+        type: path
+        required: true
+        description: Replacement image path.
+
+  remove_background_layer:
+    display_name: Remove background layer
+    category: layers
+    executor: dom_api
+    callable: autogui.dom_actions:remove_background_layer
+    description: Delete the background layer if present.
+    synonyms: ["remove background", "删除背景", "drop background"]

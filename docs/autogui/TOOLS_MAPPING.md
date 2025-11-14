@@ -2,27 +2,28 @@
 
 > Data captured via `python enumerate_tools.py --json`. LLM workflows can reference this table to translate natural-language requests into CLI flags (`--tool` / `--tool-cycle`) and then verify the active tool with `get_current_tool.py`.
 
-| CLI flag (`--tool`) | Default hotkey | Typical tools in this group | `currentTool` names (cycle order) |
-| --- | --- | --- | --- |
-| `move` | V | Move tool, Artboard tool | `moveTool`, `artboardTool` |
-| `marquee` | M | Rectangular/Elliptical marquee | `marqueeRectTool`, `marqueeEllipTool` |
-| `lasso` | L | Lasso, polygonal lasso, magnetic lasso, selection brush | `lassoTool`, `magneticLassoTool`, `polySelTool`, `selectionBrushTool` |
-| `magic_wand` | W | Magic wand, quick selection, object selection | `magicWandTool`, `quickSelectTool`, `magicLassoTool` |
-| `crop` | C | Crop, perspective crop, slice, slice select | `cropTool`, `perspectiveCropTool`, `sliceTool`, `sliceSelectTool` |
-| `eyedropper` | I | Eyedropper, color sampler, ruler, note, count | `eyedropperTool`, `colorSamplerTool`, `rulerTool`, `textAnnotTool`, `countTool` |
-| `spot_heal` | J | Spot/healing brush, patch, content-aware move, remove, red eye | `spotHealingBrushTool`, `patchSelection`, `recomposeSelection`, `removeTool`, `redEyeTool`, `magicStampTool` |
-| `clone_stamp` | S | Clone stamp, pattern stamp | `cloneStampTool`, `patternStampTool` |
-| `history_brush` | Y | History brush, art history brush | `historyBrushTool`, `artBrushTool` |
-| `eraser` | E | Eraser, background eraser, magic eraser | `eraserTool`, `backgroundEraserTool`, `magicEraserTool` |
-| `paint_bucket` | G | Paint bucket, gradient | `bucketTool`, `gradientTool` |
-| `dodge` | O | Dodge, burn, sponge | `dodgeTool`, `burnInTool`, `saturationTool` |
-| `pen` | P | Pen, freeform pen, curvature pen | `penTool`, `freeformPenTool`, `curvaturePenTool` |
-| `type` | T | Horizontal/vertical type, type masks | `typeCreateOrEditTool`, `typeVerticalCreateOrEditTool`, `typeCreateMaskTool`, `typeVerticalCreateMaskTool` |
-| `path_select` | A | Path selection / direct selection | `pathComponentSelectTool`, `directSelectTool` |
-| `shape` | U | Rectangle, ellipse, triangle, polygon, line, custom shape | `rectangleTool`, `ellipseTool`, `triangleTool`, `polygonTool`, `lineTool`, `customShapeTool` |
-| `hand` | H | Hand tool | `handTool` |
-| `rotate_view` | R | Rotate view tool | `rotateTool` |
-| `zoom` | Z | Zoom tool | `zoomTool` |
+| CLI flag (`--tool`) | Default hotkey | Typical tools in this group | `currentTool` names (cycle order) | | Variant hints & synonyms |
+| --- | --- | --- | --- | --- |
+| `move` | V | Move tool, Artboard tool | `moveTool`, `artboardTool` | moveTool (Move), artboardTool (Artboard) | moveTool (move), artboardTool (artboard) |
+| `marquee` | M | Rectangular/Elliptical marquee | `marqueeRectTool`, `marqueeEllipTool` | marqueeRectTool (Rectangular), marqueeEllipTool (Elliptical) | marqueeRectTool (rectangular), marqueeEllipTool (elliptical) |
+| `lasso` | L | Lasso, polygonal lasso, magnetic lasso, selection brush | `lassoTool`, `magneticLassoTool`, `polySelTool`, `selectionBrushTool` | lassoTool, magneticLassoTool, polySelTool, selectionBrushTool | lassoTool, magneticLassoTool, polySelTool, selectionBrushTool |
+| `magic_wand` | W | Magic wand, quick selection, object selection | `magicWandTool`, `quickSelectTool`, `magicLassoTool` | magicWandTool (Magic wand), quickSelectTool, magicLassoTool | magicWandTool (magic wand), quickSelectTool, magicLassoTool |
+| `crop` | C | Crop, perspective crop, slice, slice select | `cropTool`, `perspectiveCropTool`, `sliceTool`, `sliceSelectTool` | cropTool, perspectiveCropTool, sliceTool, sliceSelectTool | cropTool, perspectiveCropTool, sliceTool, sliceSelectTool |
+| `eyedropper` | I | Eyedropper, color sampler, ruler, note, count | `eyedropperTool`, `colorSamplerTool`, `rulerTool`, `textAnnotTool`, `countTool` | eyedropperTool, colorSamplerTool, rulerTool, textAnnotTool, countTool | eyedropperTool, colorSamplerTool, rulerTool, textAnnotTool, countTool |
+| `spot_heal` | J | Spot/healing brush, patch, content-aware move, remove, red eye | `spotHealingBrushTool`, `patchSelection`, `recomposeSelection`, `removeTool`, `redEyeTool`, `magicStampTool` | spotHealingBrushTool, patchSelection, recomposeSelection, removeTool, redEyeTool, magicStampTool | spotHealingBrushTool, patchSelection, recomposeSelection, removeTool, redEyeTool, magicStampTool |
+| `clone_stamp` | S | Clone stamp, pattern stamp | `cloneStampTool`, `patternStampTool` | cloneStampTool, patternStampTool | cloneStampTool, patternStampTool |
+| `history_brush` | Y | History brush, art history brush | `historyBrushTool`, `artBrushTool` | historyBrushTool, artBrushTool | historyBrushTool, artBrushTool |
+| `eraser` | E | Eraser, background eraser, magic eraser | `eraserTool`, `backgroundEraserTool`, `magicEraserTool` | eraserTool, backgroundEraserTool, magicEraserTool | eraserTool, backgroundEraserTool, magicEraserTool |
+| `paint_bucket` | G | Paint bucket, gradient | `bucketTool`, `gradientTool` | bucketTool (Paint bucket), gradientTool (Gradient fill) | bucketTool (paint bucket), gradientTool (gradient fill) |
+| `dodge` | O | Dodge, burn, sponge | `dodgeTool`, `burnInTool`, `saturationTool` | dodgeTool (Dodge), burnInTool (Burn), saturationTool (Sponge) | dodgeTool (dodge), burnInTool (burn), saturationTool (sponge) |
+| `pen` | P | Pen, freeform pen, curvature pen | `penTool`, `freeformPenTool`, `curvaturePenTool` | penTool, freeformPenTool, curvaturePenTool | penTool, freeformPenTool, curvaturePenTool |
+| `type` | T | Horizontal/vertical type, type masks | `typeCreateOrEditTool`, `typeVerticalCreateOrEditTool`, `typeCreateMaskTool`, `typeVerticalCreateMaskTool` | typeCreateOrEditTool (Horizontal type), typeVerticalCreateOrEditTool (Vertical type), typeCreateMaskTool, typeVerticalCreateMaskTool | typeCreateOrEditTool (horizontal type), typeVerticalCreateOrEditTool (vertical type), typeCreateMaskTool, typeVerticalCreateMaskTool |
+| `path_select` | A | Path selection / direct selection | `pathComponentSelectTool`, `directSelectTool` | pathComponentSelectTool (Path selection), directSelectTool (Direct selection) | pathComponentSelectTool (path selection), directSelectTool (direct selection) |
+| `shape` | U | Rectangle, ellipse, triangle, polygon, line, custom shape | `rectangleTool`, `ellipseTool`, `triangleTool`, `polygonTool`, `lineTool`, `customShapeTool` | rectangleTool, ellipseTool, triangleTool, polygonTool, lineTool, customShapeTool | rectangleTool, ellipseTool, triangleTool, polygonTool, lineTool, customShapeTool |
+| `hand` | H | Hand tool | `handTool` | handTool (Hand/Pan) | handTool |
+| `rotate_view` | R | Rotate view tool | `rotateTool` | rotateTool | rotateTool |
+| `zoom` | Z | Zoom tool | `zoomTool` | zoomTool | zoomTool |
+
 
 ## Usage Tips
 

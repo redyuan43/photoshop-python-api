@@ -38,8 +38,10 @@ EXTRA_SYNONYMS = {
     "file_open": ["打开文件"],
     "file_new": ["新建文档"],
     "undo": ["撤销"],
-    "screenshot": ["截图", "截屏", "屏幕截图", "screenshot", "screen shot", "capture screen", "保存屏幕", "拍一下屏幕"],
+    "screenshot": ["截图", "截屏", "屏幕截图", "screenshot", "screen shot", "capture screen", "保存屏幕", "拍一下屏幕"]
 }
+
+
 
 
 def normalize(text: str) -> str:
